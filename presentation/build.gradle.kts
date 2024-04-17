@@ -1,30 +1,19 @@
 plugins {
-    alias(libs.plugins.androidApplication)
+    id("com.android.library")
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "com.vasberc.bookflix"
+    namespace = "com.vasberc.presentation"
     compileSdk = 34
 
-    //For KSP to access generated code
-    applicationVariants.configureEach {
-        kotlin.sourceSets {
-            getByName(name) {
-                kotlin.srcDir("build/generated/ksp/${name}/kotlin")
-            }
-        }
-    }
-
     defaultConfig {
-        applicationId = "com.vasberc.bookflix"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary = true
+        }
     }
 
     buildTypes {
@@ -45,6 +34,19 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
+    buildFeatures {
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.1"
+    }
+
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
 }
 
 ksp {
@@ -52,13 +54,13 @@ ksp {
 }
 
 dependencies {
-    implementation(project(":presentation"))
-    implementation(project(":domain"))
-    implementation(project(":data_local"))
-    implementation(project(":data_remote"))
+
+    implementation(platform(libs.androidx.compose.bom))
     ksp(libs.koinKsp)
     implementation(libs.bundles.core)
+    implementation(libs.bundles.presentation)
     coreLibraryDesugaring(libs.desugaring)
     testImplementation(libs.bundles.testing)
     androidTestImplementation(libs.bundles.androidTesting)
+    debugImplementation(libs.bundles.presentationDebug)
 }
