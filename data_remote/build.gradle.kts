@@ -13,7 +13,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         android.buildFeatures.buildConfig = true
-        buildConfigField("String", "BASE_URL", "\"base_url\"")
+        buildConfigField("String", "BASE_URL", "\"https://gutendex.com/\"")
     }
 
     buildTypes {
@@ -41,6 +41,7 @@ ksp {
 }
 
 dependencies {
+    implementation(project(":domain"))
     ksp(libs.koinKsp)
     implementation(libs.bundles.core)
     implementation(libs.bundles.dataRemote)

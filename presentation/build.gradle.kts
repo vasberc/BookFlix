@@ -54,7 +54,7 @@ ksp {
 }
 
 dependencies {
-
+    implementation(project(":domain"))
     implementation(platform(libs.androidx.compose.bom))
     ksp(libs.koinKsp)
     implementation(libs.bundles.core)
