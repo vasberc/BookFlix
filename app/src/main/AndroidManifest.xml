@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
-        android:name=".BookFlixApp"
+        android:name="com.vasberc.app.BookFlixApp"
         />
 
 </manifest>

@@ -1,11 +1,21 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.ksp)
 }
 
 android {
     namespace = "com.vasberc.bookflix"
     compileSdk = 34
+
+    //For KSP to access generated code
+    applicationVariants.configureEach {
+        kotlin.sourceSets {
+            getByName(name) {
+                kotlin.srcDir("build/generated/ksp/${name}/kotlin")
+            }
+        }
+    }
 
     defaultConfig {
         applicationId = "com.vasberc.bookflix"
@@ -29,10 +39,16 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+
+        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
+}
+
+ksp {
+    arg("KOIN_CONFIG_CHECK", "true")
 }
 
 dependencies {
@@ -40,10 +56,9 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data_local"))
     implementation(project(":data_remote"))
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    ksp(libs.koinKsp)
+    implementation(libs.bundles.core)
+    coreLibraryDesugaring(libs.desugaring)
+    testImplementation(libs.bundles.testing)
+    androidTestImplementation(libs.bundles.androidTesting)
 }
