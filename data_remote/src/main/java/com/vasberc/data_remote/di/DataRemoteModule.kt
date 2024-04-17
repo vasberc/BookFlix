@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
 import com.vasberc.data_remote.BuildConfig
+import com.vasberc.data_remote.service.BookService
 import okhttp3.OkHttpClient
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Module
@@ -40,4 +41,9 @@ fun provideOkHttpClient(): OkHttpClient {
         .connectTimeout(5500, TimeUnit.MILLISECONDS)
         .callTimeout(60, TimeUnit.SECONDS)
         .build()
+}
+
+@Single
+fun provideBookService(retrofit: Retrofit): BookService {
+    return retrofit.create(BookService::class.java)
 }

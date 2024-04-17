@@ -41,6 +41,7 @@ ksp {
 }
 
 dependencies {
+    implementation(project(":domain"))
     ksp(libs.koinKsp)
     implementation(libs.bundles.core)
     implementation(libs.bundles.dataRemote)
