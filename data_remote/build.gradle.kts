@@ -13,7 +13,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         android.buildFeatures.buildConfig = true
-        buildConfigField("String", "BASE_URL", "\"base_url\"")
+        buildConfigField("String", "BASE_URL", "\"https://gutendex.com/\"")
     }
 
     buildTypes {
