@@ -21,4 +21,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "BookFlix"
 include(":app")
- 
+include(":presentation")
+include(":data_remote")
+include(":data_local")
+include(":domain")
+include(":app")
