@@ -41,6 +41,7 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 #data_remote
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofitConverter = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
@@ -59,10 +60,11 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 [bundles]
 core = ["androidx-core-ktx", "koinAndroid", "koinAnnotations", "timber"]
 presentation = [
-    "androidx-lifecycle-runtime-ktx", "androidx-activity-compose", "androidx-compose-bom", "androidx-ui",
-    "androidx-ui-graphics", "androidx-ui-tooling", "androidx-ui-tooling-preview", "androidx-material3",
-    "androidx-appcompat", "material"
+    "androidx-lifecycle-runtime-ktx", "androidx-activity-compose", "androidx-ui",
+    "androidx-ui-graphics", "androidx-ui-tooling-preview", "androidx-material3",
+    "androidx-appcompat", "material", "coil"
 ]
+presentationDebug = ["androidx-ui-tooling", "androidx-ui-test-manifest"]
 data = ["paging", "retrofit", "netWorkResponseAdapter", "roomKtx"]
 dataRemote = ["retrofit", "retrofitConverter", "netWorkResponseAdapter"]
 dataLocal = ["roomRuntime", "roomKtx"]

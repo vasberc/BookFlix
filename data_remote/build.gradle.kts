@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -10,6 +11,9 @@ android {
     defaultConfig {
         minSdk = 24
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        android.buildFeatures.buildConfig = true
+        buildConfigField("String", "BASE_URL", "\"base_url\"")
     }
 
     buildTypes {
@@ -24,18 +28,23 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+
+        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
 }
 
-dependencies {
+ksp {
+    arg("KOIN_CONFIG_CHECK", "true")
+}
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+dependencies {
+    ksp(libs.koinKsp)
+    implementation(libs.bundles.core)
+    implementation(libs.bundles.dataRemote)
+    coreLibraryDesugaring(libs.desugaring)
+    testImplementation(libs.bundles.testing)
+    androidTestImplementation(libs.bundles.androidTesting)
 }
