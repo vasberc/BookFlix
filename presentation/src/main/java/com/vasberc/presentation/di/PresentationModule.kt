@@ -1,4 +1,4 @@
-package com.vasberc.bookflix.di
+package com.vasberc.presentation.di
 
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Module

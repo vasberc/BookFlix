@@ -1,4 +1,4 @@
-package com.vasberc.app
+package com.vasberc.bookflix
 
 import android.app.Application
 import org.koin.android.ext.koin.androidContext
