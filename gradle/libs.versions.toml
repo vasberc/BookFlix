@@ -71,7 +71,7 @@ data = ["paging", "retrofit", "netWorkResponseAdapter", "roomKtx"]
 dataRemote = ["retrofit", "retrofitConverter", "netWorkResponseAdapter"]
 dataLocal = ["roomRuntime", "roomKtx"]
 testing = ["junit", "coroutines-test"]
-androidTesting = ["androidx-junit", "androidx-espresso-core"]
+androidTesting = ["androidx-junit", "androidx-espresso-core", "androidx-ui-test-junit4"]
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
