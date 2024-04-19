@@ -11,8 +11,8 @@ class FakeService(private val error: Int?) : BookService {
 
     private fun getError(): Exception {
         return when(error) {
-            0 -> IOException()
-            1 -> IllegalArgumentException()
+            NETWORK_ERROR -> IOException()
+            SERVER_ERROR -> IllegalArgumentException()
             else -> Exception()
         }
     }
@@ -90,5 +90,11 @@ class FakeService(private val error: Int?) : BookService {
         } catch (e: Exception) {
             NetworkResponse.UnknownError(e, null)
         }
+    }
+
+    companion object {
+        const val NETWORK_ERROR = 0
+        const val SERVER_ERROR = 1
+        const val UNKNOWN_ERROR = 2
     }
 }
