@@ -18,7 +18,7 @@ data class BookItemEntity(
     val position: Int
 )
 
-data class BookAntAuthorsEntity(
+data class BookAndAuthorsEntity(
     @Embedded
     val bookItemEntity: BookItemEntity,
     @Relation(
