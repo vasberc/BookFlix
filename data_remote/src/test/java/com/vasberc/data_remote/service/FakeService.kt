@@ -1,10 +1,9 @@
-package com.vasberc.data_remote
+package com.vasberc.data_remote.service
 
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.vasberc.data_remote.model.BookResponse
 import com.vasberc.data_remote.model.BooksResponse
 import com.vasberc.data_remote.model.ErrorResponse
-import com.vasberc.data_remote.service.BookService
 import retrofit2.Response
 import java.io.IOException
 
