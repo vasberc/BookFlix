@@ -56,7 +56,7 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+#androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 
 [bundles]
@@ -71,7 +71,7 @@ data = ["paging", "retrofit", "netWorkResponseAdapter", "roomKtx"]
 dataRemote = ["retrofit", "retrofitConverter", "netWorkResponseAdapter"]
 dataLocal = ["roomRuntime", "roomKtx"]
 testing = ["junit", "coroutines-test"]
-androidTesting = ["androidx-junit", "androidx-espresso-core", "androidx-ui-test-junit4"]
+androidTesting = ["androidx-junit", "androidx-espresso-core"]
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

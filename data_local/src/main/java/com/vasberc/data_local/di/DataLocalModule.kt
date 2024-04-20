@@ -5,11 +5,12 @@ import androidx.room.Room
 import com.vasberc.data_local.daos.BookDao
 import com.vasberc.data_local.daos.BookRemoteKeysDao
 import com.vasberc.data_local.db.BookFlixDataBase
+import com.vasberc.domain.di.DomainModule
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
 
-@Module
+@Module(includes = [DomainModule::class])
 @ComponentScan("com.vasberc.data_local")
 class DataLocalModule
 

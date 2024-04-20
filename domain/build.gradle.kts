@@ -33,10 +33,6 @@ android {
     }
 }
 
-ksp {
-    arg("KOIN_CONFIG_CHECK", "true")
-}
-
 dependencies {
     ksp(libs.koinKsp)
     implementation(libs.bundles.core)

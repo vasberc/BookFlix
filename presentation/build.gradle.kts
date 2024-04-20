@@ -49,10 +49,6 @@ android {
     }
 }
 
-ksp {
-    arg("KOIN_CONFIG_CHECK", "true")
-}
-
 dependencies {
     implementation(project(":domain"))
     implementation(platform(libs.androidx.compose.bom))

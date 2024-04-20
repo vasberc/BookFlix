@@ -71,12 +71,12 @@ class BooksRemoteMediatorImpl(
 
     @OptIn(ExperimentalPagingApi::class)
     private suspend fun getBooks(page: Int): MediatorResult {
-        when(val networkResult = remoteRepo.getBooks(page)) {
+        return when(val networkResult = remoteRepo.getBooks(page)) {
             is ResultState.Success -> {
-
+                MediatorResult.Success(true)
             }
             else -> {
-
+                MediatorResult.Error(Exception())
             }
         }
     }

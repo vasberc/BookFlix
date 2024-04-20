@@ -12,5 +12,4 @@ class BooksRemoteRepoImpl(private val bookService: BookService): BooksRemoteRepo
     override suspend fun getBooks(page: Int): ResultState<List<BookItem>> {
         return bookService.getBooks(page).mapToDomain()
     }
-
 }
