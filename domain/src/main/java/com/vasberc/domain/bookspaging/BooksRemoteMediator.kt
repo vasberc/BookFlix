@@ -34,6 +34,7 @@ class BooksRemoteMediatorImpl(
      */
     private var cachedBooks: List<BookItem>? = null
 
+    private var startingIndexOfPage = 1
 
     @ExperimentalPagingApi
     override suspend fun load(
@@ -46,6 +47,7 @@ class BooksRemoteMediatorImpl(
                 LoadType.REFRESH -> {
                     //Set to null, so the paging source will know that the state is loading
                     remoteDataTotalItems = null
+                    startingIndexOfPage = 1
                     cachedBooks = localRepo.getAllBooks()
                     //There refresh is our implementation can be triggered only in the top
                     //element when the user makes pull to refresh, so we have to clear the data
@@ -88,7 +90,7 @@ class BooksRemoteMediatorImpl(
                     MediatorResult.Success(true)
                 } else {
                     val books = networkResult.data.currentPageItems
-                    insertItemsToDb(books, page)
+                    insertItemsToDb(books, page, books.isEmpty())
                     //If the books are empty means that the previous page was the last page,
                     //so we need to stop fetching next page
                     MediatorResult.Success(books.isEmpty())
@@ -103,14 +105,14 @@ class BooksRemoteMediatorImpl(
         }
     }
 
-    private fun handleErrorRefresh(loadType: LoadType) {
+    private suspend fun handleErrorRefresh(loadType: LoadType) {
         if(loadType == LoadType.REFRESH) {
             //Declaring the total items with 20 items plus will make the paging source to have the itemsAfter
             //at the end of the list 20 and the ui will display 20 loading items.
             //this way the user will understand that there is an issue and will try to refresh again the list.
             remoteDataTotalItems = cachedBooks?.size?.plus(20) ?: 20
             cachedBooks?.let {
-                insertItemsToDb(it, 1)
+                insertItemsToDb(it, 1, true)
             }
             //No need em any more, release the memory
             cachedBooks = null
@@ -126,8 +128,13 @@ class BooksRemoteMediatorImpl(
         }
     }
 
-    private fun insertItemsToDb(books: List<BookItem>, page: Int) {
-
+    private suspend fun insertItemsToDb(books: List<BookItem>, page: Int, endOfPaginationReached: Boolean) {
+        val prevPage = (page - 1).takeIf { it > 0 }
+        val nextPage = (page + 1).takeIf { !endOfPaginationReached }
+        localRepo.insertAllBookRemoteKeys(books, prevPage, nextPage)
+        localRepo.insertAllBooks(books, startingIndexOfPage)
+        //Calc the starting index to be able to use it on the next page's load
+        startingIndexOfPage = books.size
     }
 
     private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, BookItem>): BookRemoteKey? {

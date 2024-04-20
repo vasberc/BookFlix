@@ -2,6 +2,8 @@ package com.vasberc.data_local.repo
 
 import com.vasberc.data_local.daos.BookDao
 import com.vasberc.data_local.daos.BookRemoteKeysDao
+import com.vasberc.data_local.entities.asEntity
+import com.vasberc.data_local.entities.asRemoteKeyEntity
 import com.vasberc.domain.model.BookItem
 import com.vasberc.domain.model.BookRemoteKey
 import com.vasberc.domain.repo.BooksLocalRepo
@@ -34,5 +36,17 @@ class BooksLocalRepoImpl(
 
     override suspend fun getRemoteKeyById(bookId: Int): BookRemoteKey? {
         return remoteKeysDao.getRemoteKeyById(bookId)?.asDomain()
+    }
+
+    override suspend fun insertAllBookRemoteKeys(
+        books: List<BookItem>,
+        prevPage: Int?,
+        nextPage: Int?
+    ) {
+        remoteKeysDao.insertAll(books.map { it.asRemoteKeyEntity(prevPage, nextPage) })
+    }
+
+    override suspend fun insertAllBooks(books: List<BookItem>, startingIndexOfPage: Int) {
+        booksDao.insertAll(books.mapIndexed { index, bookItem -> bookItem.asEntity(startingIndexOfPage + index) })
     }
 }

@@ -30,4 +30,16 @@ class FakeLocalRepo(private val fakeBookDao: FakeBookDao, private val fakeBookRe
     override suspend fun getRemoteKeyById(bookId: Int): BookRemoteKey? {
         return fakeBookRemoteKeysDao.getRemoteKeyById(bookId)?.asDomain()
     }
+
+    override suspend fun insertAllBookRemoteKeys(
+        books: List<BookItem>,
+        prevPage: Int?,
+        nextPage: Int?
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun insertAllBooks(books: List<BookItem>, startingIndexOfPage: Int) {
+        TODO("Not yet implemented")
+    }
 }
