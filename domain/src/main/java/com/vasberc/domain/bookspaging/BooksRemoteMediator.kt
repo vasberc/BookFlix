@@ -27,6 +27,14 @@ class BooksRemoteMediatorImpl(
     localRepo: BooksLocalRepo,
     remoteRepo: BooksRemoteRepo
 ): BooksRemoteMediator(localRepo, remoteRepo) {
+
+    /**
+     * In each refresh will hold the previous cached items in order to
+     * recover them again if the refresh fails due to connection errors
+     */
+    private var cachedBooks: List<BookItem>? = null
+
+
     @ExperimentalPagingApi
     override suspend fun load(
         loadType: LoadType,
@@ -38,6 +46,7 @@ class BooksRemoteMediatorImpl(
                 LoadType.REFRESH -> {
                     //Set to null, so the paging source will know that the state is loading
                     remoteDataTotalItems = null
+                    cachedBooks = localRepo.getAllBooks()
                     //There refresh is our implementation can be triggered only in the top
                     //element when the user makes pull to refresh, so we have to clear the data
                     //because we will get from network all the data again
@@ -61,7 +70,7 @@ class BooksRemoteMediatorImpl(
                 }
             }
 
-            val mediatorResult = getBooks(page)
+            val mediatorResult = loadPage(page, loadType)
             Timber.d("BooksRemoteMediatorImpl loadType=$loadType page=$page result=$mediatorResult")
             return@withContext withContext(Dispatchers.Main.immediate) {
                 mediatorResult
@@ -70,16 +79,55 @@ class BooksRemoteMediatorImpl(
     }
 
     @OptIn(ExperimentalPagingApi::class)
-    private suspend fun getBooks(page: Int): MediatorResult {
+    private suspend fun loadPage(page: Int, loadType: LoadType): MediatorResult {
         return when(val networkResult = remoteRepo.getBooks(page)) {
             is ResultState.Success -> {
-                val totalResults = networkResult.data
-                MediatorResult.Success(true)
+                handleSuccessRefresh(loadType)
+                remoteDataTotalItems = networkResult.data.totalItems
+                if(remoteDataTotalItems == 0) {
+                    MediatorResult.Success(true)
+                } else {
+                    val books = networkResult.data.currentPageItems
+                    insertItemsToDb(books, page)
+                    //If the books are empty means that the previous page was the last page,
+                    //so we need to stop fetching next page
+                    MediatorResult.Success(books.isEmpty())
+                }
+
             }
             else -> {
-                MediatorResult.Error(Exception())
+                handleErrorRefresh(loadType)
+                //Return also exception to handle it on the ui to make some automatic retries
+                MediatorResult.Error(Exception("loadType=${loadType.name}"))
             }
         }
+    }
+
+    private fun handleErrorRefresh(loadType: LoadType) {
+        if(loadType == LoadType.REFRESH) {
+            //Declaring the total items with 20 items plus will make the paging source to have the itemsAfter
+            //at the end of the list 20 and the ui will display 20 loading items.
+            //this way the user will understand that there is an issue and will try to refresh again the list.
+            remoteDataTotalItems = cachedBooks?.size?.plus(20) ?: 20
+            cachedBooks?.let {
+                insertItemsToDb(it, 1)
+            }
+            //No need em any more, release the memory
+            cachedBooks = null
+
+        }
+    }
+
+    private fun handleSuccessRefresh(loadType: LoadType) {
+        if(loadType == LoadType.REFRESH ) {
+            //Release the cached books, because the refresh succeeded and the new data from the network
+            //will be used.
+            cachedBooks = null
+        }
+    }
+
+    private fun insertItemsToDb(books: List<BookItem>, page: Int) {
+
     }
 
     private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, BookItem>): BookRemoteKey? {
