@@ -37,3 +37,24 @@ data class BookAndAuthorsEntity(
     }
 
 }
+
+fun BookItem.asEntity(position: Int): BookAndAuthorsEntity {
+    return BookAndAuthorsEntity(
+        bookItemEntity = BookItemEntity(
+            id = id,
+            title = title,
+            image = image,
+            position = position
+        ),
+        authorEntities = authors.map {
+            AuthorEntity(
+                name = it,
+                bookId = id
+            )
+        }
+    )
+}
+
+fun BookItem.asRemoteKeyEntity(previous: Int?, next: Int?): BookRemoteKeysEntity {
+    return BookRemoteKeysEntity(bookId = id, prevKey = previous, nextKey = next)
+}

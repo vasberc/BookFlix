@@ -1,10 +1,9 @@
-package com.vasberc.data_remote
+package com.vasberc.data_remote.service
 
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.vasberc.data_remote.model.BookResponse
 import com.vasberc.data_remote.model.BooksResponse
 import com.vasberc.data_remote.model.ErrorResponse
-import com.vasberc.data_remote.service.BookService
 import retrofit2.Response
 import java.io.IOException
 
@@ -12,8 +11,8 @@ class FakeService(private val error: Int?) : BookService {
 
     private fun getError(): Exception {
         return when(error) {
-            0 -> IOException()
-            1 -> IllegalArgumentException()
+            NETWORK_ERROR -> IOException()
+            SERVER_ERROR -> IllegalArgumentException()
             else -> Exception()
         }
     }
@@ -65,6 +64,7 @@ class FakeService(private val error: Int?) : BookService {
         return try {
             NetworkResponse.Success(
                 body = BooksResponse(
+                    count = 1000,
                     results = books(page)
                 ),
                 response = Response.success("")
@@ -91,5 +91,11 @@ class FakeService(private val error: Int?) : BookService {
         } catch (e: Exception) {
             NetworkResponse.UnknownError(e, null)
         }
+    }
+
+    companion object {
+        const val NETWORK_ERROR = 0
+        const val SERVER_ERROR = 1
+        const val UNKNOWN_ERROR = 2
     }
 }
