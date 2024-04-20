@@ -16,4 +16,10 @@ class FakeBookRemoteKeysDao(private val db: FakeDb): BookRemoteKeysDao {
         return db.getRemoteKeys()
     }
 
+    override suspend fun insertAll(bookRemoteKeysEntities: List<BookRemoteKeysEntity>) {
+        bookRemoteKeysEntities.forEach {
+            db.addRemoteKeyIgnoreStrategy(it)
+        }
+    }
+
 }

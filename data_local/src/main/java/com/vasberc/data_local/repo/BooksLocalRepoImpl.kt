@@ -47,6 +47,6 @@ class BooksLocalRepoImpl(
     }
 
     override suspend fun insertAllBooks(books: List<BookItem>, startingIndexOfPage: Int) {
-        booksDao.insertAll(books.mapIndexed { index, bookItem -> bookItem.asEntity(startingIndexOfPage + index) })
+        booksDao.insertAllBookAndAuthors(books.mapIndexed { index, bookItem -> bookItem.asEntity(startingIndexOfPage + index) })
     }
 }

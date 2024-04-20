@@ -21,5 +21,5 @@ interface BookRemoteKeysDao {
      * With ignore strategy because the same strategy applied to the book it self
      */
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertAll(map: List<BookRemoteKeysEntity>)
+    suspend fun insertAll(bookRemoteKeysEntities: List<BookRemoteKeysEntity>)
 }
