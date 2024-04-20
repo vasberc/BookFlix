@@ -2,6 +2,8 @@ package com.vasberc.data_remote.model
 
 
 import com.google.gson.annotations.SerializedName
+import com.vasberc.domain.model.BookDetailed
+import com.vasberc.domain.model.Domainable
 
 data class BookResponse(
     @SerializedName("authors")
@@ -14,7 +16,7 @@ data class BookResponse(
     val subjects: List<String?>?,
     @SerializedName("title")
     val title: String?
-) {
+): Domainable<BookDetailed> {
     data class Author(
         @SerializedName("birth_year")
         val birthYear: Int?,
@@ -22,10 +24,32 @@ data class BookResponse(
         val deathYear: Int?,
         @SerializedName("name")
         val name: String?
-    )
+    ): Domainable<BookDetailed.Author> {
+        override fun asDomain(vararg args: Any): BookDetailed.Author {
+            return BookDetailed.Author(
+                name = name ?: "",
+                birthYear = birthYear ?: -1,
+                deathYear = deathYear ?: -1
+            )
+        }
+
+    }
 
     data class Formats(
         @SerializedName("image/jpeg")
         val imagejpeg: String?
-    )
+    ): Domainable<String> {
+        override fun asDomain(vararg args: Any): String {
+            return imagejpeg ?: ""
+        }
+    }
+
+    override fun asDomain(vararg args: Any): BookDetailed {
+        return BookDetailed(
+            id = id ?: -1,
+            authors = authors?.mapNotNull { it?.asDomain() } ?: listOf(),
+            subject = subjects?.first() ?: "",
+            image = formats?.asDomain() ?: ""
+        )
+    }
 }
