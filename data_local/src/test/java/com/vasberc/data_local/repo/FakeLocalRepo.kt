@@ -12,14 +12,22 @@ class FakeLocalRepo(private val fakeBookDao: FakeBookDao, private val fakeBookRe
     }
 
     override suspend fun clearRemoteKeys() {
-
+        fakeBookRemoteKeysDao.clearRemoteKeys()
     }
 
     override suspend fun clearAllEntities() {
-
+        fakeBookDao.clearAllEntities()
     }
 
-    override suspend fun remoteKeysId(bookId: Int): BookRemoteKey? {
-        return null
+    override suspend fun getAllBooks(): List<BookItem> {
+        return fakeBookDao.getAllBooks().map { it.asDomain() }
+    }
+
+    override suspend fun getAllKeys(): List<BookRemoteKey> {
+        return fakeBookRemoteKeysDao.getAllKeys().map { it.asDomain() }
+    }
+
+    override suspend fun getRemoteKeyById(bookId: Int): BookRemoteKey? {
+        return fakeBookRemoteKeysDao.getRemoteKeyById(bookId)?.asDomain()
     }
 }

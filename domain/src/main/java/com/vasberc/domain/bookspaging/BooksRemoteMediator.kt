@@ -87,7 +87,7 @@ class BooksRemoteMediatorImpl(
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
             ?.let { book ->
                 // Get the remote keys of the last item retrieved
-                localRepo.remoteKeysId(book.id)
+                localRepo.getRemoteKeyById(book.id)
             }
     }
 }

@@ -24,7 +24,15 @@ class BooksLocalRepoImpl(
         TODO("Not yet implemented")
     }
 
-    override suspend fun remoteKeysId(bookId: Int): BookRemoteKey? {
+    override suspend fun getAllBooks(): List<BookItem> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getAllKeys(): List<BookRemoteKey> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getRemoteKeyById(bookId: Int): BookRemoteKey? {
         TODO("Not yet implemented")
     }
 }

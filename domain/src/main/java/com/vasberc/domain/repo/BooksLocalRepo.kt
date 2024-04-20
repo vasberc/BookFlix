@@ -8,5 +8,9 @@ interface BooksLocalRepo {
     suspend fun clearRemoteKeys()
     suspend fun clearAllEntities()
 
-    suspend fun remoteKeysId(bookId: Int): BookRemoteKey?
+    suspend fun getAllBooks(): List<BookItem>
+
+    suspend fun getAllKeys(): List<BookRemoteKey>
+
+    suspend fun getRemoteKeyById(bookId: Int): BookRemoteKey?
 }

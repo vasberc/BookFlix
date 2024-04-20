@@ -6,19 +6,18 @@ import com.vasberc.data_local.fakeDb.FakeBookRemoteKeysDao
 import com.vasberc.data_local.fakeDb.FakeDb
 import com.vasberc.data_local.repo.FakeLocalRepo
 import com.vasberc.domain.repo.BooksLocalRepo
-import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.Before
 
-class TestGetBooksByPage {
+class TestGetBooks {
 
     private lateinit var localRepo: BooksLocalRepo
 
     @Before
     fun setUp() {
         val db = FakeDb()
-        val remoteKeysDao = FakeBookRemoteKeysDao()
+        val remoteKeysDao = FakeBookRemoteKeysDao(db)
         val bookDao = FakeBookDao(db)
         localRepo = FakeLocalRepo(bookDao, remoteKeysDao)
         repeat(50) {
@@ -36,19 +35,16 @@ class TestGetBooksByPage {
         val books = localRepo.getBooksByPage(20, 0)
         assert(books.none { it.id >= 20 })
     }
-    @Test
-    fun getFirstPageError() = runTest {
-        val books = localRepo.getBooksByPage(20, 0)
-        assert(books.any { it.id >= 20 })
-    }
+
     @Test
     fun getSecondPageSuccess() = runTest {
-        val books = localRepo.getBooksByPage(20, 0)
-        assert(books.none { it.id < 20 })
+        val books = localRepo.getBooksByPage(20, 1)
+        assert(books.none { it.id < 20 || it.id >= 40 })
     }
+
     @Test
-    fun getSecondPageError() = runTest {
-        val books = localRepo.getBooksByPage(20, 0)
-        assert(books.any { it.id < 20 })
+    fun getAll() = runTest {
+        val books = localRepo.getAllBooks()
+        assert(books.isNotEmpty())
     }
 }
