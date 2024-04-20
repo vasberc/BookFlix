@@ -7,7 +7,7 @@ import com.vasberc.data_local.entities.BookItemEntity
 
 class FakeBookDao(private val fakeDb: FakeDb): BookDao {
     override suspend fun getBooksByPage(limit: Int, offset: Int): List<BookAndAuthorsEntity> {
-        return fakeDb.getBooksAndAuthor().subList(offset * limit, offset + limit)
+        return fakeDb.getBooksAndAuthor().subList(offset, offset + limit)
     }
 
     override suspend fun clearAllEntities() {

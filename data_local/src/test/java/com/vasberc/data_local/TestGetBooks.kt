@@ -38,7 +38,8 @@ class TestGetBooks {
 
     @Test
     fun getSecondPageSuccess() = runTest {
-        val books = localRepo.getBooksByPage(20, 1)
+        //offset = page - 1 * limit
+        val books = localRepo.getBooksByPage(20, 20)
         assert(books.none { it.id < 20 || it.id >= 40 })
     }
 

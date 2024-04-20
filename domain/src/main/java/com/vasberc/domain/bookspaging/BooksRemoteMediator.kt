@@ -134,7 +134,7 @@ class BooksRemoteMediatorImpl(
         localRepo.insertAllBookRemoteKeys(books, prevPage, nextPage)
         localRepo.insertAllBooks(books, startingIndexOfPage)
         //Calc the starting index to be able to use it on the next page's load
-        startingIndexOfPage = books.size
+        startingIndexOfPage = books.size + 1
     }
 
     private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, BookItem>): BookRemoteKey? {
