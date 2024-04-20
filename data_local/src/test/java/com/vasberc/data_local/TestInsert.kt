@@ -54,6 +54,17 @@ class TestInsert {
     }
 
     @Test
+    fun testInsert1stPageRemoteKeys() = runTest {
+        localRepo.clearRemoteKeys()
+
+        localRepo.insertAllBookRemoteKeys(bookItems1stPage, null, 2)
+        localRepo.insertAllBookRemoteKeys(bookItems2ndPage, 1, 3)
+        val remoteKey = localRepo.getRemoteKeyById(bookItems1stPage.first().id)
+        assertEquals(remoteKey?.nextKey, 2)
+    }
+
+
+    @Test
     fun testInsert2ndPageBooks() = runTest {
         localRepo.clearAllEntities()
         //This test helps also to check the starting index of page logic

@@ -1,6 +1,7 @@
 package com.vasberc.data_local.repo
 
 import com.vasberc.data_local.entities.asEntity
+import com.vasberc.data_local.entities.asRemoteKeyEntity
 import com.vasberc.data_local.fakeDb.FakeBookDao
 import com.vasberc.data_local.fakeDb.FakeBookRemoteKeysDao
 import com.vasberc.domain.model.BookItem
@@ -37,7 +38,7 @@ class FakeLocalRepo(private val fakeBookDao: FakeBookDao, private val fakeBookRe
         prevPage: Int?,
         nextPage: Int?
     ) {
-        TODO("Not yet implemented")
+        fakeBookRemoteKeysDao.insertAll(books.map { it.asRemoteKeyEntity(prevPage, nextPage) })
     }
 
     override suspend fun insertAllBooks(books: List<BookItem>, startingIndexOfPage: Int) {
