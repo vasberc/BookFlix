@@ -64,6 +64,7 @@ class FakeService(private val error: Int?) : BookService {
         return try {
             NetworkResponse.Success(
                 body = BooksResponse(
+                    count = 1000,
                     results = books(page)
                 ),
                 response = Response.success("")

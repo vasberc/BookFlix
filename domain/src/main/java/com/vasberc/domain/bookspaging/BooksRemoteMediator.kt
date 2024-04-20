@@ -73,6 +73,7 @@ class BooksRemoteMediatorImpl(
     private suspend fun getBooks(page: Int): MediatorResult {
         return when(val networkResult = remoteRepo.getBooks(page)) {
             is ResultState.Success -> {
+                val totalResults = networkResult.data
                 MediatorResult.Success(true)
             }
             else -> {

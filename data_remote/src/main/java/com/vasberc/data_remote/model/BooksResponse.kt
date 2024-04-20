@@ -4,11 +4,14 @@ package com.vasberc.data_remote.model
 import com.google.gson.annotations.SerializedName
 import com.vasberc.domain.model.BookItem
 import com.vasberc.domain.model.Domainable
+import com.vasberc.domain.model.RemoteData
 
 data class BooksResponse(
+    @SerializedName("count")
+    val count: Int?,
     @SerializedName("results")
     val results: List<Result?>?
-): Domainable<List<BookItem>> {
+): Domainable<RemoteData> {
     data class Result(
         @SerializedName("authors")
         val authors: List<Author?>?,
@@ -39,7 +42,10 @@ data class BooksResponse(
         }
     }
 
-    override fun asDomain(vararg args: Any): List<BookItem> {
-        return results?.mapNotNull { it?.asDomain() } ?: listOf()
+    override fun asDomain(vararg args: Any): RemoteData {
+        return RemoteData(
+            totalItems = count ?: 0,
+            currentPageItems = results?.mapNotNull { it?.asDomain() } ?: listOf()
+        )
     }
 }
