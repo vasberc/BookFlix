@@ -17,22 +17,22 @@ class BooksLocalRepoImpl(
     }
 
     override suspend fun clearRemoteKeys() {
-        TODO("Not yet implemented")
+        remoteKeysDao.clearRemoteKeys()
     }
 
     override suspend fun clearAllEntities() {
-        TODO("Not yet implemented")
+        booksDao.clearAllEntities()
     }
 
     override suspend fun getAllBooks(): List<BookItem> {
-        TODO("Not yet implemented")
+        return booksDao.getAllBooks().map { it.asDomain() }
     }
 
     override suspend fun getAllKeys(): List<BookRemoteKey> {
-        TODO("Not yet implemented")
+        return remoteKeysDao.getAllKeys().map { it.asDomain() }
     }
 
     override suspend fun getRemoteKeyById(bookId: Int): BookRemoteKey? {
-        TODO("Not yet implemented")
+        return remoteKeysDao.getRemoteKeyById(bookId)?.asDomain()
     }
 }
