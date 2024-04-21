@@ -13,7 +13,8 @@ import androidx.navigation.navArgument
 @Composable
 fun BookFlixNavHost(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    onMessage: (message: String) -> Unit
 ) {
 
     NavHost(navController = navController,  startDestination = BookFlixRoutes.BookList.route, modifier = modifier) {

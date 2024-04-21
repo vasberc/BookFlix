@@ -7,6 +7,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.vasberc.presentation.navigation.BookFlixRoutes
 
+/**
+ * Checks the current destination returns as arguments in the onDestinationResolved the title and
+ * if we should display the back button in the app bar
+ */
 @Composable
 fun CurrentDestinationHandler(
     navController: NavHostController,

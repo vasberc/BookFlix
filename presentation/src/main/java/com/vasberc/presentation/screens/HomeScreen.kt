@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen() {
 
-    val message by remember { mutableStateOf<String?>(null) }
+    var message by remember { mutableStateOf<String?>(null) }
     var title by remember { mutableStateOf<String?>(null) }
     var hasBackButton by remember { mutableStateOf(false) }
 
@@ -50,7 +50,9 @@ fun HomeScreen() {
         BookFlixNavHost(
             modifier = Modifier.padding(paddingValues),
             navController =  navController
-        )
+        ) { messageToShow ->
+            message = messageToShow
+        }
 
 
 
@@ -60,6 +62,7 @@ fun HomeScreen() {
         LaunchedEffect(message) {
             coroutineScope.launch {
                 if(message != null) {
+                    message = null
                     snackbarHostState.currentSnackbarData?.dismiss()
                     snackbarHostState.showSnackbar(message = message!!, duration = SnackbarDuration.Short)
                 }
