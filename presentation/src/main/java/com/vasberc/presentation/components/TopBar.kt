@@ -59,7 +59,6 @@ fun TopBar(title: String?, hasBackButton: Boolean, onBackPressed: () -> Unit) {
             text = title ?: "Hello",
             style = TextStyle(
                 fontSize = 20.sp,
-                fontFamily = FontFamily.Default,
                 color = Color.White
             )
         )
