@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,41 +31,43 @@ fun HomeScreen() {
 
     val navController = rememberNavController()
 
-    CurrentDestinationHandler(navController = navController) { currentTitle, hasBack ->
-        title = currentTitle
-        hasBackButton = hasBack
-    }
+    CurrentDestinationHandler(
+        navController = navController,
+        onDestinationResolved = { currentTitle, hasBack ->
+            title = currentTitle
+            hasBackButton = hasBack
+        }
+    )
+
+    val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
         topBar = {
             TopBar(
                 title = title,
-                hasBackButton = hasBackButton
-            ) {
-                navController.popBackStack()
-            }
+                hasBackButton = hasBackButton,
+                onBackPressed = { navController.popBackStack() }
+            )
         },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         modifier = Modifier.fillMaxSize()
     ) { paddingValues ->
 
         BookFlixNavHost(
             modifier = Modifier.padding(paddingValues),
-            navController =  navController
-        ) { messageToShow ->
-            message = messageToShow
-        }
+            navController =  navController,
+            onMessage = { messageToShow ->
+                message = messageToShow
+            }
+        )
 
-
-
-
-        val snackbarHostState = remember { SnackbarHostState() }
         val coroutineScope = rememberCoroutineScope()
         LaunchedEffect(message) {
             coroutineScope.launch {
                 if(message != null) {
-                    message = null
                     snackbarHostState.currentSnackbarData?.dismiss()
                     snackbarHostState.showSnackbar(message = message!!, duration = SnackbarDuration.Short)
+                    message = null
                 }
             }
         }

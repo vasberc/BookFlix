@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
@@ -29,7 +28,7 @@ import androidx.compose.ui.unit.sp
 import com.vasberc.presentation.ui.theme.BookFlixTheme
 
 @Composable
-fun TopBar(title: String?, hasBackButton: Boolean, onClick: () -> Unit) {
+fun TopBar(title: String?, hasBackButton: Boolean, onBackPressed: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -47,7 +46,7 @@ fun TopBar(title: String?, hasBackButton: Boolean, onClick: () -> Unit) {
                 modifier = Modifier
                     .clip(CircleShape)
                     .clickable {
-                        onClick()
+                        onBackPressed()
                     }
                     .padding(5.dp)
             )

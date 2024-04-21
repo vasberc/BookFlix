@@ -34,7 +34,7 @@ class BooksRemoteMediatorImpl(
      */
     private var cachedBooks: List<BookItem>? = null
 
-    private var startingIndexOfPage = 1
+    private var startingIndexOfPage = hashMapOf(1 to 1)
 
     @ExperimentalPagingApi
     override suspend fun load(
@@ -47,7 +47,7 @@ class BooksRemoteMediatorImpl(
                 LoadType.REFRESH -> {
                     //Set to null, so the paging source will know that the state is loading
                     remoteDataTotalItems = null
-                    startingIndexOfPage = 1
+                    startingIndexOfPage = hashMapOf(1 to 1)
                     cachedBooks = localRepo.getAllBooks()
                     //There refresh is our implementation can be triggered only in the top
                     //element when the user makes pull to refresh, so we have to clear the data
@@ -132,9 +132,9 @@ class BooksRemoteMediatorImpl(
         val prevPage = (page - 1).takeIf { it > 0 }
         val nextPage = (page + 1).takeIf { !endOfPaginationReached }
         localRepo.insertAllBookRemoteKeys(books, prevPage, nextPage)
-        localRepo.insertAllBooks(books, startingIndexOfPage)
+        localRepo.insertAllBooks(books, startingIndexOfPage[page]!!)
         //Calc the starting index to be able to use it on the next page's load
-        startingIndexOfPage = books.size + 1
+        startingIndexOfPage[page + 1] = startingIndexOfPage[page]!! + books.size
     }
 
     private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, BookItem>): BookRemoteKey? {
