@@ -42,14 +42,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.vasberc.domain.model.BookItem
 import com.vasberc.presentation.components.BookListItem
+import com.vasberc.presentation.navigation.BookFlixRoutes
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -61,12 +64,24 @@ import kotlin.math.roundToInt
 @Composable
 fun BookListScreen(
     navController: NavHostController,
-    onMessage: (message: String) -> Unit,
     viewModel: BookListViewModel = getViewModel()
 ) {
 
     BookListMainContent(
-        viewModel.pagerFlow
+        books = viewModel.pagerFlow,
+        onNavigateToDetailedView = {
+            navController.navigate(
+                BookFlixRoutes.BookDetailedScreen.route
+                    .replace(
+                        "{bookId}",
+                        it.id.toString()
+                    )
+                    .replace(
+                        "{title}",
+                        it.title
+                    )
+            )
+        }
     )
 
 }
@@ -74,8 +89,10 @@ fun BookListScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookListMainContent(
-    books: Flow<PagingData<BookItem>>
+    books: Flow<PagingData<BookItem>>,
+    onNavigateToDetailedView: (BookItem) -> Unit
 ) {
+    //This variable holds the retry job in order to be able to know that is started and to cancel it
     var retryJob by remember {
         mutableStateOf<Job?>(null)
     }
@@ -88,6 +105,8 @@ fun BookListMainContent(
             lazyPagingItems.refresh()
         }
     }
+
+    val lifeCycleOwner = LocalLifecycleOwner.current
 
     Box(
         Modifier
@@ -108,7 +127,14 @@ fun BookListMainContent(
             items(lazyPagingItems.itemCount) { index ->
                 key(lazyPagingItems[index]?.id ?: (0 - index)) {
                     Spacer(modifier = Modifier.height(5.dp))
-                    BookListItem(item = lazyPagingItems[index])
+                    BookListItem(
+                        item = lazyPagingItems[index],
+                        onItemClicked = {
+                            if(lifeCycleOwner.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+                                onNavigateToDetailedView(it)
+                            }
+                        }
+                    )
                     if (lazyPagingItems.itemCount - 1 == index) {
                         Spacer(modifier = Modifier.height(5.dp))
                     }
@@ -171,18 +197,14 @@ fun BookListMainContent(
             mutableStateOf(false)
         }
 
-        when (lazyPagingItems.loadState.refresh) {
-            is LoadState.Loading -> {
-            }
-
+        when (lazyPagingItems.loadState.mediator?.refresh) {
             is LoadState.Error -> {
                 state.endRefresh()
                 if(retryJob == null) {
                     startJob = true
                 }
             }
-            //Not loading
-            else -> {
+            is LoadState.NotLoading -> {
                 state.endRefresh()
                 if(lazyPagingItems.loadState.append is LoadState.Error) {
                     if(retryJob == null) {
@@ -193,6 +215,7 @@ fun BookListMainContent(
                     retryJob = null
                 }
             }
+            else -> Unit
         }
 
         if(startJob) {

@@ -18,7 +18,7 @@ fun BookFlixNavHost(
 
     NavHost(navController = navController,  startDestination = BookFlixRoutes.BookList.route, modifier = modifier) {
         composable(BookFlixRoutes.BookList.route) {
-            BookListScreen(navController, onMessage)
+            BookListScreen(navController)
         }
 
         composable(BookFlixRoutes.BookDetailedScreen.route, BookFlixRoutes.BookDetailedScreen.arguments) {

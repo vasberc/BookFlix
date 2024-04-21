@@ -1,6 +1,7 @@
 package com.vasberc.presentation.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -22,10 +23,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,7 +36,7 @@ import com.vasberc.domain.model.BookItem
 import com.vasberc.presentation.R
 
 @Composable
-fun BookListItem(item: BookItem?) {
+fun BookListItem(item: BookItem?, onItemClicked: (book: BookItem) -> Unit) {
     var heightIs by remember {
         mutableIntStateOf(0)
     }
@@ -50,6 +49,9 @@ fun BookListItem(item: BookItem?) {
             modifier = Modifier
                 .clip(RoundedCornerShape(15.dp))
                 .background(MaterialTheme.colorScheme.primary)
+                .clickable {
+                    onItemClicked(item)
+                }
         ) {
 
             var showShimmer by remember { mutableStateOf(true) }
