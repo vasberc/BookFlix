@@ -21,6 +21,7 @@ coil = "2.6.0"
 netWorkResponseAdapter = "5.0.0"
 desugaring = "2.0.4"
 coroutines = "1.7.1"
+composeNavigation = "2.7.7"
 
 [libraries]
 #core
@@ -35,6 +36,7 @@ desugaring = { group = "com.android.tools", name = "desugar_jdk_libs", version.r
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "composeNavigation" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
@@ -64,7 +66,7 @@ core = ["androidx-core-ktx", "koinAndroid", "koinAnnotations", "timber"]
 presentation = [
     "androidx-lifecycle-runtime-ktx", "androidx-activity-compose", "androidx-ui",
     "androidx-ui-graphics", "androidx-ui-tooling-preview", "androidx-material3",
-    "androidx-appcompat", "material", "coil"
+    "androidx-appcompat", "material", "coil", "androidx-compose-navigation"
 ]
 presentationDebug = ["androidx-ui-tooling", "androidx-ui-test-manifest"]
 data = ["paging", "retrofit", "netWorkResponseAdapter", "roomKtx"]
