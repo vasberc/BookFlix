@@ -36,12 +36,16 @@ class FakeLocalRepo(private val fakeBookDao: FakeBookDao, private val fakeBookRe
     override suspend fun insertAllBookRemoteKeys(
         books: List<BookItem>,
         prevPage: Int?,
-        nextPage: Int?
+        nextPage: Int?,
+        isRefresh: Boolean
     ) {
+        if(isRefresh) {
+            fakeBookRemoteKeysDao.clearRemoteKeys()
+        }
         fakeBookRemoteKeysDao.insertAll(books.map { it.asRemoteKeyEntity(prevPage, nextPage) })
     }
 
-    override suspend fun insertAllBooks(books: List<BookItem>, startingIndexOfPage: Int) {
-        fakeBookDao.insertAllBookAndAuthors(books.mapIndexed { index, bookItem -> bookItem.asEntity(startingIndexOfPage + index) })
+    override suspend fun insertAllBooks(books: List<BookItem>, startingIndexOfPage: Int, isRefresh: Boolean) {
+        fakeBookDao.insertAllBookAndAuthors(books.mapIndexed { index, bookItem -> bookItem.asEntity(startingIndexOfPage + index) }, isRefresh)
     }
 }

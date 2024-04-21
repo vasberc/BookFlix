@@ -30,4 +30,19 @@ class FakeBookDao(private val fakeDb: FakeDb): BookDao {
         }
     }
 
+    override suspend fun insertAllBookAndAuthors(
+        bookAndAuthorsEntities: List<BookAndAuthorsEntity>,
+        isRefresh: Boolean
+    ) {
+        if(isRefresh) {
+            fakeDb.deleteAllBooks()
+        }
+        val authorEntities = mutableListOf<AuthorEntity>()
+        insertAllBooks(bookAndAuthorsEntities.map {
+            authorEntities.addAll(it.authorEntities)
+            it.bookItemEntity
+        })
+        insertAllAuthors(authorEntities)
+    }
+
 }

@@ -34,6 +34,9 @@ class BooksRemoteMediatorImpl(
      */
     private var cachedBooks: List<BookItem>? = null
 
+    /**
+     * Pairs page to starting index
+     */
     private var startingIndexOfPage = hashMapOf(1 to 1)
 
     @ExperimentalPagingApi
