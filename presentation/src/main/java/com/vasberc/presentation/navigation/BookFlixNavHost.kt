@@ -1,12 +1,14 @@
 package com.vasberc.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.vasberc.presentation.screens.bookdetailed.BookDetailedScreen
 import com.vasberc.presentation.screens.booklist.BookListScreen
 
 @Composable
@@ -22,7 +24,7 @@ fun BookFlixNavHost(
         }
 
         composable(BookFlixRoutes.BookDetailedScreen.route, BookFlixRoutes.BookDetailedScreen.arguments) {
-
+            BookDetailedScreen(navController, onMessage)
         }
     }
 }

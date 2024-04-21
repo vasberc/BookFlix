@@ -4,6 +4,7 @@ import com.vasberc.data_local.entities.asEntity
 import com.vasberc.data_local.entities.asRemoteKeyEntity
 import com.vasberc.data_local.fakeDb.FakeBookDao
 import com.vasberc.data_local.fakeDb.FakeBookRemoteKeysDao
+import com.vasberc.domain.model.BookDetailed
 import com.vasberc.domain.model.BookItem
 import com.vasberc.domain.model.BookRemoteKey
 import com.vasberc.domain.repo.BooksLocalRepo
@@ -47,5 +48,13 @@ class FakeLocalRepo(private val fakeBookDao: FakeBookDao, private val fakeBookRe
 
     override suspend fun insertAllBooks(books: List<BookItem>, startingIndexOfPage: Int, isRefresh: Boolean) {
         fakeBookDao.insertAllBookAndAuthors(books.mapIndexed { index, bookItem -> bookItem.asEntity(startingIndexOfPage + index) }, isRefresh)
+    }
+
+    override suspend fun getDetailedBook(bookId: Int): BookDetailed? {
+        return null
+    }
+
+    override suspend fun cacheRemoteBook(data: BookDetailed) {
+
     }
 }

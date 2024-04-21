@@ -1,9 +1,13 @@
 package com.vasberc.data_local.fakeDb
 
 import com.vasberc.data_local.daos.BookDao
+import com.vasberc.data_local.entities.AuthorAndBookDetailedEntity
+import com.vasberc.data_local.entities.AuthorDetailedEntity
 import com.vasberc.data_local.entities.AuthorEntity
 import com.vasberc.data_local.entities.BookAndAuthorsEntity
+import com.vasberc.data_local.entities.BookDetailedWithRelations
 import com.vasberc.data_local.entities.BookItemEntity
+import com.vasberc.data_local.entities.DetailedBookEntity
 
 class FakeBookDao(private val fakeDb: FakeDb): BookDao {
     override suspend fun getBooksByPage(limit: Int, offset: Int): List<BookAndAuthorsEntity> {
@@ -28,6 +32,38 @@ class FakeBookDao(private val fakeDb: FakeDb): BookDao {
         authorEntities.forEach {
             fakeDb.addAuthorIgnoreStrategy(it)
         }
+    }
+
+    override suspend fun getDetailedBook(bookId: Int): BookDetailedWithRelations? {
+        return null
+    }
+
+    override suspend fun getDetailedBooks(): List<BookDetailedWithRelations> {
+        return listOf()
+    }
+
+    override suspend fun deleteDetailedBook(bookId: Int) {
+
+    }
+
+    override suspend fun deleteDetailedAuthorAndBook(bookId: Int) {
+
+    }
+
+    override suspend fun deleteDetailedAuthor(name: String) {
+
+    }
+
+    override suspend fun insertDetailedBook(book: DetailedBookEntity) {
+
+    }
+
+    override suspend fun insertAuthorDetailed(author: AuthorDetailedEntity) {
+
+    }
+
+    override suspend fun insertBookAndAuthorDetailed(authorAndBook: AuthorAndBookDetailedEntity) {
+
     }
 
     override suspend fun insertAllBookAndAuthors(

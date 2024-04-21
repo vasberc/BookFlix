@@ -236,9 +236,3 @@ fun BookListMainContent(
 
     }
 }
-
-@Composable
-@Preview
-fun PreviewBookListMainContent() {
-
-}
