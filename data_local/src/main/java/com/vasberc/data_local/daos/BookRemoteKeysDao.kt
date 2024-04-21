@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.vasberc.data_local.entities.BookRemoteKeysEntity
 
 @Dao
@@ -22,4 +23,9 @@ interface BookRemoteKeysDao {
      */
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(bookRemoteKeysEntities: List<BookRemoteKeysEntity>)
+    @Transaction
+    suspend fun insertAllWithRefresh(bookRemoteKeysEntities: List<BookRemoteKeysEntity>) {
+        clearRemoteKeys()
+        insertAll(bookRemoteKeysEntities)
+    }
 }

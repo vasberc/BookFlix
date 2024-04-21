@@ -49,9 +49,11 @@ android {
     }
 }
 
-ksp {
-    arg("KOIN_CONFIG_CHECK", "true")
-}
+//Commented out because the domain module does not have enabled the compile check feature
+//and is not possible to check at compile time dependencies from domain module
+//ksp {
+//    arg("KOIN_CONFIG_CHECK", "true")
+//}
 
 dependencies {
     implementation(project(":domain"))

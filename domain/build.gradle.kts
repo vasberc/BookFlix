@@ -43,7 +43,7 @@ android {
 dependencies {
     ksp(libs.koinKsp)
     implementation(libs.bundles.core)
-    implementation(libs.bundles.data)
+    implementation(libs.bundles.domain)
     coreLibraryDesugaring(libs.desugaring)
     testImplementation(libs.bundles.testing)
     androidTestImplementation(libs.bundles.androidTesting)

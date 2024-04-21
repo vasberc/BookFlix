@@ -47,8 +47,8 @@ class TestInsert {
     fun testInsert1stPageBooks() = runTest {
         localRepo.clearAllEntities()
         //This test helps also to check the starting index of page logic
-        localRepo.insertAllBooks(bookItems1stPage, 1)
-        localRepo.insertAllBooks(bookItems2ndPage, bookItems1stPage.size + 1)
+        localRepo.insertAllBooks(bookItems1stPage, 1, false)
+        localRepo.insertAllBooks(bookItems2ndPage, bookItems1stPage.size + 1, false)
         val books1stPage = localRepo.getBooksByPage( bookItems1stPage.size, 0)
         assertEquals(books1stPage, bookItems1stPage)
     }
@@ -57,8 +57,8 @@ class TestInsert {
     fun testInsert1stPageRemoteKeys() = runTest {
         localRepo.clearRemoteKeys()
 
-        localRepo.insertAllBookRemoteKeys(bookItems1stPage, null, 2)
-        localRepo.insertAllBookRemoteKeys(bookItems2ndPage, 1, 3)
+        localRepo.insertAllBookRemoteKeys(bookItems1stPage, null, 2, false)
+        localRepo.insertAllBookRemoteKeys(bookItems2ndPage, 1, 3, false)
         val remoteKey = localRepo.getRemoteKeyById(bookItems1stPage.first().id)
         assertEquals(remoteKey?.nextKey, 2)
     }
@@ -68,8 +68,8 @@ class TestInsert {
     fun testInsert2ndPageBooks() = runTest {
         localRepo.clearAllEntities()
         //This test helps also to check the starting index of page logic
-        localRepo.insertAllBooks(bookItems1stPage, 1)
-        localRepo.insertAllBooks(bookItems2ndPage, bookItems1stPage.size + 1)
+        localRepo.insertAllBooks(bookItems1stPage, 1, false)
+        localRepo.insertAllBooks(bookItems2ndPage, bookItems1stPage.size + 1, false)
         val books2ndPage = localRepo.getBooksByPage(bookItems2ndPage.size, bookItems1stPage.size)
         assertEquals(books2ndPage, bookItems2ndPage)
     }

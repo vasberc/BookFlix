@@ -17,11 +17,14 @@ ksp = "1.9.10-1.0.13"
 room = "2.6.1"
 paging = "3.2.1"
 timber = "5.0.1"
-coil = "2.6.0"
+coil = "2.4.0"
 netWorkResponseAdapter = "5.0.0"
 desugaring = "2.0.4"
 coroutines = "1.7.1"
 composeNavigation = "2.7.7"
+composePaging = "3.2.1"
+koinCompose = "3.4.6"
+constraintCompose = "1.0.1"
 
 [libraries]
 #core
@@ -37,6 +40,9 @@ androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecyc
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "composeNavigation" }
+androidx-compose-paging = { group = "androidx.paging", name = "paging-compose", version.ref = "composePaging" }
+androidx-constraint-layout-compose = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "constraintCompose" }
+koi-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koinCompose" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
@@ -44,7 +50,7 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
+coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 #data_remote
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofitConverter = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
@@ -66,12 +72,13 @@ core = ["androidx-core-ktx", "koinAndroid", "koinAnnotations", "timber"]
 presentation = [
     "androidx-lifecycle-runtime-ktx", "androidx-activity-compose", "androidx-ui",
     "androidx-ui-graphics", "androidx-ui-tooling-preview", "androidx-material3",
-    "androidx-appcompat", "material", "coil", "androidx-compose-navigation"
+    "androidx-appcompat", "material", "coil", "androidx-compose-navigation", "androidx-compose-paging",
+    "koi-compose", "androidx-constraint-layout-compose"
 ]
 presentationDebug = ["androidx-ui-tooling", "androidx-ui-test-manifest"]
-data = ["paging", "retrofit", "netWorkResponseAdapter", "roomKtx"]
+domain = ["paging", "retrofit", "netWorkResponseAdapter", "roomKtx"]
 dataRemote = ["retrofit", "retrofitConverter", "netWorkResponseAdapter"]
-dataLocal = ["roomRuntime", "roomKtx"]
+dataLocal = ["roomRuntime", "roomKtx", "paging"]
 testing = ["junit", "coroutines-test"]
 androidTesting = ["androidx-junit", "androidx-espresso-core"]
 

@@ -41,12 +41,18 @@ class BooksLocalRepoImpl(
     override suspend fun insertAllBookRemoteKeys(
         books: List<BookItem>,
         prevPage: Int?,
-        nextPage: Int?
+        nextPage: Int?,
+        isRefresh: Boolean
     ) {
-        remoteKeysDao.insertAll(books.map { it.asRemoteKeyEntity(prevPage, nextPage) })
+        val entities = books.map { it.asRemoteKeyEntity(prevPage, nextPage) }
+        if(isRefresh) {
+            remoteKeysDao.insertAllWithRefresh(entities)
+        } else {
+            remoteKeysDao.insertAll(entities)
+        }
     }
 
-    override suspend fun insertAllBooks(books: List<BookItem>, startingIndexOfPage: Int) {
-        booksDao.insertAllBookAndAuthors(books.mapIndexed { index, bookItem -> bookItem.asEntity(startingIndexOfPage + index) })
+    override suspend fun insertAllBooks(books: List<BookItem>, startingIndexOfPage: Int, isRefresh: Boolean) {
+        booksDao.insertAllBookAndAuthors(books.mapIndexed { index, bookItem -> bookItem.asEntity(startingIndexOfPage + index) }, isRefresh)
     }
 }
