@@ -20,11 +20,14 @@ interface BookDao {
     suspend fun clearAllEntities()
 
     @Transaction
-    @Query("SELECT * FROM books")
+    @Query("SELECT * FROM books ORDER BY position")
     suspend fun getAllBooks(): List<BookAndAuthorsEntity>
 
     @Transaction
-    suspend fun insertAllBookAndAuthors(bookAndAuthorsEntities: List<BookAndAuthorsEntity>) {
+    suspend fun insertAllBookAndAuthors(bookAndAuthorsEntities: List<BookAndAuthorsEntity>, isRefresh: Boolean) {
+        if(isRefresh) {
+            clearAllEntities()
+        }
         val books = mutableListOf<BookItemEntity>()
         val authors = mutableListOf<AuthorEntity>()
         //Do it with forEach to because the bookAndAuthorsEntities.map { it.bookItemEntity }

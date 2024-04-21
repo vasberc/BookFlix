@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -19,7 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -35,6 +38,13 @@ import com.vasberc.presentation.R
 
 @Composable
 fun BookListItem(item: BookItem?) {
+    var heightIs by remember {
+        mutableIntStateOf(0)
+    }
+    var widthIs by remember {
+        mutableIntStateOf(0)
+    }
+
     if (item != null) {
         Column(
             modifier = Modifier
@@ -56,7 +66,7 @@ fun BookListItem(item: BookItem?) {
                 modifier = Modifier
                     .height(250.dp)
                     .fillMaxWidth()
-                    .background(shimmerBrush(showShimmer = showShimmer)),
+                    .background(shimmerBrush(showShimmer = showShimmer, targetValue = 4000f)),
                 contentScale = ContentScale.Crop
             )
 
@@ -118,6 +128,9 @@ fun BookListItem(item: BookItem?) {
                         bottom.linkTo(parent.bottom)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
+                    }.onGloballyPositioned {
+                       heightIs = it.size.height
+                        widthIs = it.size.width
                     }
             ) {
 
@@ -182,8 +195,7 @@ fun BookListItem(item: BookItem?) {
                     width = Dimension.fillToConstraints
                     height = Dimension.fillToConstraints
                 }
-                .background(shimmerBrush())) {
-            }
+                .background(shimmerBrush(targetValue = 4000f)))
         }
 
     }
