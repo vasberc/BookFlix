@@ -1,5 +1,6 @@
 package com.vasberc.domain.repo
 
+import com.vasberc.domain.model.BookDetailed
 import com.vasberc.domain.model.BookItem
 import com.vasberc.domain.model.BookRemoteKey
 
@@ -16,4 +17,6 @@ interface BooksLocalRepo {
     suspend fun insertAllBookRemoteKeys(books: List<BookItem>, prevPage: Int?, nextPage: Int?, isRefresh: Boolean)
 
     suspend fun insertAllBooks(books: List<BookItem>, startingIndexOfPage: Int, isRefresh: Boolean)
+    suspend fun getDetailedBook(bookId: Int): BookDetailed?
+    suspend fun cacheRemoteBook(data: BookDetailed)
 }

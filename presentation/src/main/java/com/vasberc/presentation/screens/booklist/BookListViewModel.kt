@@ -1,9 +1,11 @@
 package com.vasberc.presentation.screens.booklist
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
 import com.vasberc.domain.bookspaging.BooksPagingSource
 import com.vasberc.domain.bookspaging.BooksRemoteMediator
 import org.koin.android.annotation.KoinViewModel
@@ -31,6 +33,6 @@ class BookListViewModel(
                 )
                 pagingSource
             }
-        ).flow
+        ).flow.cachedIn(viewModelScope)
     }
 }

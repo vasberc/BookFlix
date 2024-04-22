@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -140,45 +141,58 @@ fun BookListItem(item: BookItem?, onItemClicked: (book: BookItem) -> Unit) {
                     modifier = Modifier
                         .height(250.dp)
                         .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.primaryContainer)
                 )
 
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
                     text = "",
-                    modifier = Modifier.padding(horizontal = 10.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 10.dp)
+                        .width(150.dp)
+                        .background(MaterialTheme.colorScheme.primaryContainer),
                     style = TextStyle(
                         fontSize = 18.sp,
                         color = Color.White
                     )
                 )
-
+                Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = "",
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(horizontal = 10.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 10.dp)
+                        .width(300.dp)
+                        .background(MaterialTheme.colorScheme.primaryContainer),
                     style = TextStyle(
                         color = Color.White
                     )
                 )
 
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
                     text = "",
-                    modifier = Modifier.padding(horizontal = 10.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 10.dp)
+                        .width(150.dp)
+                        .background(MaterialTheme.colorScheme.primaryContainer),
                     style = TextStyle(
                         fontSize = 18.sp,
                         color = Color.White
                     )
                 )
-
+                Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = "",
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(horizontal = 10.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 10.dp)
+                        .width(300.dp)
+                        .background(MaterialTheme.colorScheme.primaryContainer),
                     style = TextStyle(
                         color = Color.White
                     )

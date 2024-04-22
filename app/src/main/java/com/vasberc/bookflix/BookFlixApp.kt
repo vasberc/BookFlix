@@ -8,10 +8,12 @@ import com.vasberc.presentation.di.PresentationModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.ksp.generated.module
+import timber.log.Timber
 
 class BookFlixApp: Application() {
     override fun onCreate() {
         super.onCreate()
+        initTimber()
         startKoin()
     }
 
@@ -25,5 +27,9 @@ class BookFlixApp: Application() {
                 DataLocalModule().module
             )
         }
+    }
+
+    private fun initTimber() {
+        Timber.plant(Timber.DebugTree())
     }
 }
