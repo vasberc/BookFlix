@@ -102,12 +102,12 @@ interface BookDao {
 
     }
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertDetailedBook(book: DetailedBookEntity)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAuthorDetailed(author: AuthorDetailedEntity)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertBookAndAuthorDetailed(authorAndBook: AuthorAndBookDetailedEntity)
 }

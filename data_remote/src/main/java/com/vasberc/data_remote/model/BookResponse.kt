@@ -49,7 +49,8 @@ data class BookResponse(
             id = id ?: -1,
             authors = authors?.mapNotNull { it?.asDomain() } ?: listOf(),
             subject = subjects?.first() ?: "",
-            image = formats?.asDomain() ?: ""
+            image = formats?.asDomain() ?: "",
+            title = title ?: ""
         )
     }
 }

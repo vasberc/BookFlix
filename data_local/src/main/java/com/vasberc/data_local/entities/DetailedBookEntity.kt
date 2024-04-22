@@ -14,7 +14,8 @@ data class DetailedBookEntity(
     @PrimaryKey
     val id: Int,
     val subject: String,
-    val image: String
+    val image: String,
+    val title: String
 )
 
 @Entity("author_detailed")
@@ -78,7 +79,8 @@ data class BookDetailedWithRelations(
             id = bookDetailed.id,
             authors = authors.map { it.asDomain() },
             subject = bookDetailed.subject,
-            image = bookDetailed.image
+            image = bookDetailed.image,
+            title = bookDetailed.title
         )
     }
 
@@ -87,7 +89,7 @@ data class BookDetailedWithRelations(
 fun BookDetailed.asEntity(): BookDetailedWithRelations {
     return BookDetailedWithRelations(
         bookDetailed = DetailedBookEntity(
-            id = id, subject = subject, image = image
+            id = id, subject = subject, image = image, title = title
         ),
         authors = authors.map { it.asEntity() }
     )
