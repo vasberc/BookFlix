@@ -43,7 +43,7 @@ class BooksPagingSourceImpl(
                 val limit = params.loadSize
                 val offset = (page - 1) * limit
                 val books = localRepo.getBooksByPage(limit, offset)
-                val itemsBefore = params.loadSize * (page -1)
+                val itemsBefore = params.loadSize * (page - 1)
                 //Setting items after to 20 if the total items is null, because
                 //null means that is the initial load of the list, and we will insert 100 loading place holders
                 //tha they will display the shimmer loading item.

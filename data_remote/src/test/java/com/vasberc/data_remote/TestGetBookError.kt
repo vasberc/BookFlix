@@ -2,7 +2,7 @@ package com.vasberc.data_remote
 
 import com.vasberc.data_remote.repo.FakeRepo
 import com.vasberc.data_remote.service.FakeService
-import com.vasberc.domain.model.ErrorModel
+import com.vasberc.domain.model.Error
 import com.vasberc.domain.model.ResultState
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
@@ -15,7 +15,7 @@ class TestGetBookError {
     fun testIsServerError() = runTest {
         repo = FakeRepo(FakeService(FakeService.SERVER_ERROR))
         val result = repo.getBookById(1)
-        val isServerError = (result as? ResultState.Error)?.error is ErrorModel.ServerError
+        val isServerError = (result as? ResultState.Error)?.error is com.vasberc.domain.model.ErrorModel.Error.ServerError
         Assert.assertEquals(isServerError, true)
     }
 
@@ -23,7 +23,7 @@ class TestGetBookError {
     fun testIsNetworkError() = runTest {
         repo = FakeRepo(FakeService(FakeService.NETWORK_ERROR))
         val result = repo.getBookById(1)
-        val isNetworkError = (result as? ResultState.Error)?.error is ErrorModel.NetworkError
+        val isNetworkError = (result as? ResultState.Error)?.error is com.vasberc.domain.model.ErrorModel.Error.NetworkError
         Assert.assertEquals(isNetworkError, true)
     }
 
@@ -31,7 +31,7 @@ class TestGetBookError {
     fun testIsUnknownError() = runTest {
         repo = FakeRepo(FakeService(FakeService.UNKNOWN_ERROR))
         val result = repo.getBookById(1)
-        val isUnknownError = (result as? ResultState.Error)?.error is ErrorModel.Unknown
+        val isUnknownError = (result as? ResultState.Error)?.error is com.vasberc.domain.model.ErrorModel.Error.Unknown
         Assert.assertEquals(isUnknownError, true)
     }
 }

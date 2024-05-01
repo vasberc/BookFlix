@@ -7,9 +7,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vasberc.domain.model.BookDetailed
-import com.vasberc.domain.model.ErrorModel
+import com.vasberc.domain.model.Error
 import com.vasberc.domain.usecase.GetBookDetailedDataUseCase
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
@@ -48,7 +47,7 @@ class BookDetailedViewModel(
                     onError = {
                         bookDetailedScreenState = BookDetailedScreenState(
                             loading = false,
-                            message = if(it is ErrorModel.NetworkError) {
+                            message = if(it is com.vasberc.domain.model.ErrorModel.Error.NetworkError) {
                                 "Your connection appears to be offline, please try again later!"
                             } else {
                                 "Something went wrong, please try again!"

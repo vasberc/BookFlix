@@ -25,7 +25,7 @@ data class AuthorEntity(
     val name: String,
     val bookId: Int
 ): Domainable<String> {
-    override fun asDomain(vararg args: Any): String {
+    override fun toDomain(vararg args: Any): String {
         return name
     }
 }

@@ -12,7 +12,7 @@ data class BookRemoteKeysEntity(
     val prevKey: Int?,
     val nextKey: Int?
 ): Domainable<BookRemoteKey> {
-    override fun asDomain(vararg args: Any): BookRemoteKey {
+    override fun toDomain(vararg args: Any): BookRemoteKey {
         return BookRemoteKey(bookId, prevKey, nextKey)
     }
 }

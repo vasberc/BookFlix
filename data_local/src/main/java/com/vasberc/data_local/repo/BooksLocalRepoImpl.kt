@@ -2,7 +2,7 @@ package com.vasberc.data_local.repo
 
 import com.vasberc.data_local.daos.BookDao
 import com.vasberc.data_local.daos.BookRemoteKeysDao
-import com.vasberc.data_local.entities.asEntity
+import com.vasberc.data_local.entities.toEntity
 import com.vasberc.data_local.entities.asRemoteKeyEntity
 import com.vasberc.domain.model.BookDetailed
 import com.vasberc.domain.model.BookItem
@@ -16,7 +16,7 @@ class BooksLocalRepoImpl(
     private val remoteKeysDao: BookRemoteKeysDao
 ): BooksLocalRepo {
     override suspend fun getBooksByPage(limit: Int, offset: Int): List<BookItem> {
-        return booksDao.getBooksByPage(limit, offset).map { it.asDomain() }
+        return booksDao.getBooksByPage(limit, offset).map { it.toDomain() }
     }
 
     override suspend fun clearRemoteKeys() {
@@ -28,15 +28,15 @@ class BooksLocalRepoImpl(
     }
 
     override suspend fun getAllBooks(): List<BookItem> {
-        return booksDao.getAllBooks().map { it.asDomain() }
+        return booksDao.getAllBooks().map { it.toDomain() }
     }
 
     override suspend fun getAllKeys(): List<BookRemoteKey> {
-        return remoteKeysDao.getAllKeys().map { it.asDomain() }
+        return remoteKeysDao.getAllKeys().map { it.toDomain() }
     }
 
     override suspend fun getRemoteKeyById(bookId: Int): BookRemoteKey? {
-        return remoteKeysDao.getRemoteKeyById(bookId)?.asDomain()
+        return remoteKeysDao.getRemoteKeyById(bookId)?.toDomain()
     }
 
     override suspend fun insertAllBookRemoteKeys(
@@ -54,14 +54,14 @@ class BooksLocalRepoImpl(
     }
 
     override suspend fun insertAllBooks(books: List<BookItem>, startingIndexOfPage: Int, isRefresh: Boolean) {
-        booksDao.insertAllBookAndAuthors(books.mapIndexed { index, bookItem -> bookItem.asEntity(startingIndexOfPage + index) }, isRefresh)
+        booksDao.insertAllBookAndAuthors(books.mapIndexed { index, bookItem -> bookItem.toEntity(startingIndexOfPage + index) }, isRefresh)
     }
 
     override suspend fun getDetailedBook(bookId: Int): BookDetailed? {
-        return booksDao.getDetailedBook(bookId)?.asDomain()
+        return booksDao.getDetailedBook(bookId)?.toDomain()
     }
 
     override suspend fun cacheRemoteBook(data: BookDetailed) {
-        booksDao.insertDetailedBook(data.asEntity())
+        booksDao.insertDetailedBook(data.toEntity())
     }
 }

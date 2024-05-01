@@ -1,7 +1,7 @@
 package com.vasberc.domain.usecase
 
 import com.vasberc.domain.model.BookDetailed
-import com.vasberc.domain.model.ErrorModel
+import com.vasberc.domain.model.Error
 import com.vasberc.domain.model.ResultState
 import com.vasberc.domain.repo.BooksLocalRepo
 import com.vasberc.domain.repo.BooksRemoteRepo
@@ -30,7 +30,7 @@ class GetBookDetailedDataUseCase(
                     emit(remoteBookState)
                     localRepo.cacheRemoteBook(remoteBookState.data)
                 } else {
-                    emit(ResultState.Error((remoteBookState as? ResultState.Error)?.error ?: ErrorModel.Unknown()))
+                    emit(ResultState.Error((remoteBookState as? ResultState.Error)?.error ?: Error.Unknown()))
                 }
             }
         }.flowOn(Dispatchers.IO)

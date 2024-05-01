@@ -25,7 +25,7 @@ data class BookResponse(
         @SerializedName("name")
         val name: String?
     ): Domainable<BookDetailed.Author> {
-        override fun asDomain(vararg args: Any): BookDetailed.Author {
+        override fun toDomain(vararg args: Any): BookDetailed.Author {
             return BookDetailed.Author(
                 name = name ?: "",
                 birthYear = birthYear ?: -1,
@@ -39,17 +39,17 @@ data class BookResponse(
         @SerializedName("image/jpeg")
         val imagejpeg: String?
     ): Domainable<String> {
-        override fun asDomain(vararg args: Any): String {
+        override fun toDomain(vararg args: Any): String {
             return imagejpeg ?: ""
         }
     }
 
-    override fun asDomain(vararg args: Any): BookDetailed {
+    override fun toDomain(vararg args: Any): BookDetailed {
         return BookDetailed(
             id = id ?: -1,
-            authors = authors?.mapNotNull { it?.asDomain() } ?: listOf(),
+            authors = authors?.mapNotNull { it?.toDomain() } ?: listOf(),
             subject = subjects?.first() ?: "",
-            image = formats?.asDomain() ?: "",
+            image = formats?.toDomain() ?: "",
             title = title ?: ""
         )
     }

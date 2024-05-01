@@ -27,18 +27,18 @@ data class BookAndAuthorsEntity(
     )
     val authorEntities: List<AuthorEntity>
 ): Domainable<BookItem> {
-    override fun asDomain(vararg args: Any): BookItem {
+    override fun toDomain(vararg args: Any): BookItem {
         return BookItem(
             bookItemEntity.id,
             bookItemEntity.title,
-            authorEntities.map { it.asDomain() },
+            authorEntities.map { it.toDomain() },
             bookItemEntity.image
         )
     }
 
 }
 
-fun BookItem.asEntity(position: Int): BookAndAuthorsEntity {
+fun BookItem.toEntity(position: Int): BookAndAuthorsEntity {
     return BookAndAuthorsEntity(
         bookItemEntity = BookItemEntity(
             id = id,

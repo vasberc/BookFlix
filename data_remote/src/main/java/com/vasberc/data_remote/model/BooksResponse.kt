@@ -32,7 +32,7 @@ data class BooksResponse(
             val imagejpeg: String?
         )
 
-        override fun asDomain(vararg args: Any): BookItem {
+        override fun toDomain(vararg args: Any): BookItem {
             return BookItem(
                 id ?: -1,
                 title ?: "",
@@ -42,10 +42,10 @@ data class BooksResponse(
         }
     }
 
-    override fun asDomain(vararg args: Any): RemoteData {
+    override fun toDomain(vararg args: Any): RemoteData {
         return RemoteData(
             totalItems = count ?: 0,
-            currentPageItems = results?.mapNotNull { it?.asDomain() } ?: listOf()
+            currentPageItems = results?.mapNotNull { it?.toDomain() } ?: listOf()
         )
     }
 }
