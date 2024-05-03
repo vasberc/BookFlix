@@ -12,7 +12,7 @@ import java.io.IOException
 
 class FakeService(private val error: Int?) : BookService {
 
-    private fun getError(): Exception {
+    private fun getErrorException(): Exception {
         return when (error) {
             NETWORK_ERROR -> IOException()
             SERVER_ERROR -> IllegalArgumentException()
@@ -22,7 +22,7 @@ class FakeService(private val error: Int?) : BookService {
 
     private fun books(page: Int): List<BooksResponse.Result> {
         if (error != null) {
-            throw getError()
+            throw getErrorException()
         } else {
             val start = (page - 1) * 32
             val end = start + 32
@@ -43,7 +43,7 @@ class FakeService(private val error: Int?) : BookService {
 
     private fun book(id: Int): BookResponse {
         if (error != null) {
-            throw getError()
+            throw getErrorException()
         } else {
             //Calc the page to generate the same authors as the books end point
             val page = if (id == 0) 1 else 31 / id
