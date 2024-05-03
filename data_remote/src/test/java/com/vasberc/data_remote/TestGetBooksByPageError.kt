@@ -15,7 +15,7 @@ class TestGetBooksByPageError {
     fun testIsServerError() = runTest {
         repo = FakeRepo(FakeService(FakeService.SERVER_ERROR))
         val result = repo.getBooks(1)
-        val isServerError = (result as? ResultState.Error)?.error is com.vasberc.domain.model.ErrorModel.Error.ServerError
+        val isServerError = (result as? ResultState.Error)?.error is Error.Server
         assertEquals(isServerError, true)
     }
 
@@ -23,7 +23,7 @@ class TestGetBooksByPageError {
     fun testIsNetworkError() = runTest {
         repo = FakeRepo(FakeService(FakeService.NETWORK_ERROR))
         val result = repo.getBooks(1)
-        val isNetworkError = (result as? ResultState.Error)?.error is com.vasberc.domain.model.ErrorModel.Error.NetworkError
+        val isNetworkError = (result as? ResultState.Error)?.error is Error.Network
         assertEquals(isNetworkError, true)
     }
 
@@ -31,7 +31,7 @@ class TestGetBooksByPageError {
     fun testIsUnknownError() = runTest {
         repo = FakeRepo(FakeService(FakeService.UNKNOWN_ERROR))
         val result = repo.getBooks(1)
-        val isUnknownError = (result as? ResultState.Error)?.error is com.vasberc.domain.model.ErrorModel.Error.Unknown
+        val isUnknownError = (result as? ResultState.Error)?.error is Error.Unknown
         assertEquals(isUnknownError, true)
     }
 }

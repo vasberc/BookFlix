@@ -2,6 +2,7 @@ package com.vasberc.domain.bookspaging
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
+import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import com.vasberc.domain.model.BookItem
@@ -17,16 +18,9 @@ import timber.log.Timber
 @OptIn(ExperimentalPagingApi::class)
 abstract class BooksRemoteMediator(
     protected val localRepo: BooksLocalRepo,
-    protected val remoteRepo: BooksRemoteRepo
+    private val remoteRepo: BooksRemoteRepo
 ): RemoteMediator<Int, BookItem>() {
     var remoteDataTotalItems: Int? = null
-}
-
-@Single
-class BooksRemoteMediatorImpl(
-    localRepo: BooksLocalRepo,
-    remoteRepo: BooksRemoteRepo
-): BooksRemoteMediator(localRepo, remoteRepo) {
 
     /**
      * In each refresh will hold the previous cached items in order to
@@ -39,47 +33,9 @@ class BooksRemoteMediatorImpl(
      */
     private var startingIndexOfPage = hashMapOf(1 to 1)
 
-    @ExperimentalPagingApi
-    override suspend fun load(
-        loadType: LoadType,
-        state: PagingState<Int, BookItem>
-    ): MediatorResult {
-        return withContext(Dispatchers.IO)  {
-            Timber.d("BooksRemoteMediatorImpl new loadState=$loadType")
-            val page = when (loadType) {
-                LoadType.REFRESH -> {
-                    //Set to null, so the paging source will know that the state is loading
-                    remoteDataTotalItems = null
-                    startingIndexOfPage = hashMapOf(1 to 1)
-                    cachedBooks = localRepo.getAllBooks()
-                    1
-                }
-                LoadType.PREPEND -> {
-                    return@withContext MediatorResult.Success(endOfPaginationReached = true)
-                }
-                LoadType.APPEND -> {
-                    val remoteKeys = getRemoteKeyForLastItem(state)
-                    // If remoteKeys is null, that means the refresh result is not in the database yet.
-                    // We can return Success with endOfPaginationReached = false because Paging
-                    // will call this method again if RemoteKeys becomes non-null.
-                    // If remoteKeys is NOT NULL but its nextKey is null, that means we've reached
-                    // the end of pagination for append.
-                    val nextKey = remoteKeys?.nextKey
-                        ?: return@withContext MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
-                    nextKey
-                }
-            }
 
-            val mediatorResult = loadPage(page, loadType)
-            Timber.d("BooksRemoteMediatorImpl loadType=$loadType page=$page result=$mediatorResult")
-            return@withContext withContext(Dispatchers.Main.immediate) {
-                mediatorResult
-            }
-        }
-    }
 
-    @OptIn(ExperimentalPagingApi::class)
-    private suspend fun loadPage(page: Int, loadType: LoadType): MediatorResult {
+    protected suspend fun loadPage(page: Int, loadType: LoadType): MediatorResult {
         return when(val networkResult = remoteRepo.getBooks(page)) {
             is ResultState.Success -> {
                 handleSuccessRefresh(loadType)
@@ -110,7 +66,7 @@ class BooksRemoteMediatorImpl(
             //this way the user will understand that there is an issue and will try to refresh again the list.
             remoteDataTotalItems = cachedBooks?.size?.plus(20) ?: 20
             cachedBooks?.let {
-                insertItemsToDb(it, 1, true, true)
+                insertItemsToDb(books = it, page = 1, endOfPaginationReached = true, isRefresh = true)
             }
             //No need em any more, release the memory
             cachedBooks = null
@@ -135,13 +91,63 @@ class BooksRemoteMediatorImpl(
         startingIndexOfPage[page + 1] = startingIndexOfPage[page]!! + books.size
     }
 
-    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, BookItem>): BookRemoteKey? {
+    protected suspend fun onRefresh(): Int {
+        //Set to null, so the paging source will know that the state is loading
+        remoteDataTotalItems = null
+        startingIndexOfPage = hashMapOf(1 to 1)
+        cachedBooks = localRepo.getAllBooks()
+        return 1
+    }
+
+    protected suspend fun getRemoteKeyForLastItem(pages:  List<PagingSource.LoadResult.Page<Int, BookItem>>): BookRemoteKey? {
         // Get the last page that was retrieved, that contained items.
         // From that last page, get the last item
-        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
+        return pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
             ?.let { book ->
                 // Get the remote keys of the last item retrieved
                 localRepo.getRemoteKeyById(book.id)
             }
+    }
+}
+
+@Single
+class BooksRemoteMediatorImpl(
+    localRepo: BooksLocalRepo,
+    remoteRepo: BooksRemoteRepo
+): BooksRemoteMediator(localRepo, remoteRepo) {
+
+    @ExperimentalPagingApi
+    override suspend fun load(
+        loadType: LoadType,
+        state: PagingState<Int, BookItem>
+    ): MediatorResult {
+        return withContext(Dispatchers.IO)  {
+            Timber.d("BooksRemoteMediatorImpl new loadState=$loadType")
+            val page = when (loadType) {
+                LoadType.REFRESH -> {
+                   onRefresh()
+                }
+                LoadType.PREPEND -> {
+                    return@withContext MediatorResult.Success(endOfPaginationReached = true)
+                }
+                LoadType.APPEND -> {
+                    val remoteKeys = getRemoteKeyForLastItem(state.pages)
+                    // If remoteKeys is null, that means the refresh result is not in the database yet.
+                    // We can return Success with endOfPaginationReached = false because Paging
+                    // will call this method again if RemoteKeys becomes non-null.
+                    // If remoteKeys is NOT NULL but its nextKey is null, that means we've reached
+                    // the end of pagination for append.
+                    val nextKey =
+                        remoteKeys?.nextKey ?: return@withContext MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
+                    nextKey
+                }
+            }
+
+            val mediatorResult = loadPage(page, loadType)
+            Timber.d("BooksRemoteMediatorImpl loadType=$loadType page=$page result=$mediatorResult")
+            return@withContext withContext(Dispatchers.Main.immediate) {
+                mediatorResult
+            }
+        }
     }
 }

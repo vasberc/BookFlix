@@ -1,18 +1,19 @@
-package com.vasberc.data_remote.service
+package com.vasberc.domain.service
 
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.vasberc.data_remote.model.BookResponse
 import com.vasberc.data_remote.model.BooksResponse
 import com.vasberc.data_remote.model.ErrorResponse
-import okhttp3.ResponseBody
+import com.vasberc.data_remote.service.BookService
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
 import java.io.IOException
 
+
 class FakeService(private val error: Int?) : BookService {
 
-    private fun getError(): Exception {
-        return when(error) {
+    private fun getErrorException(): Exception {
+        return when (error) {
             NETWORK_ERROR -> IOException()
             SERVER_ERROR -> IllegalArgumentException()
             else -> Exception()
@@ -20,8 +21,8 @@ class FakeService(private val error: Int?) : BookService {
     }
 
     private fun books(page: Int): List<BooksResponse.Result> {
-        if(error != null) {
-            throw getError()
+        if (error != null) {
+            throw getErrorException()
         } else {
             val start = (page - 1) * 32
             val end = start + 32
@@ -41,11 +42,11 @@ class FakeService(private val error: Int?) : BookService {
     }
 
     private fun book(id: Int): BookResponse {
-        if(error != null) {
-            throw getError()
+        if (error != null) {
+            throw getErrorException()
         } else {
             //Calc the page to generate the same authors as the books end point
-            val page = if(id == 0) 1 else 31 / id
+            val page = if (id == 0) 1 else 31 / id
             return BookResponse(
                 authors = (0..page).map { authorIndex ->
                     BookResponse.Author(

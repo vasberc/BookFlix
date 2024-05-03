@@ -47,7 +47,7 @@ class BookDetailedViewModel(
                     onError = {
                         bookDetailedScreenState = BookDetailedScreenState(
                             loading = false,
-                            message = if(it is com.vasberc.domain.model.ErrorModel.Error.NetworkError) {
+                            message = if(it is Error.Network) {
                                 "Your connection appears to be offline, please try again later!"
                             } else {
                                 "Something went wrong, please try again!"

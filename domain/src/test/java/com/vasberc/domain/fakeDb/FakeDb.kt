@@ -1,4 +1,4 @@
-package com.vasberc.data_local.fakeDb
+package com.vasberc.domain.fakeDb
 
 import com.vasberc.data_local.entities.AuthorAndBookDetailedEntity
 import com.vasberc.data_local.entities.AuthorDetailedEntity

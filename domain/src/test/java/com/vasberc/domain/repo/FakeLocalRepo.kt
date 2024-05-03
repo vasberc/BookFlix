@@ -1,4 +1,4 @@
-package com.vasberc.data_local.repo
+package com.vasberc.domain.repo
 
 import com.vasberc.data_local.daos.BookDao
 import com.vasberc.data_local.daos.BookRemoteKeysDao
