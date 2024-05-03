@@ -1,4 +1,4 @@
-package com.vasberc.domain
+package com.vasberc.domain.paging
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
@@ -16,7 +16,7 @@ class FakeRemoteMediator(localRepo: BooksLocalRepo, remoteRepo: BooksRemoteRepo)
         loadType: LoadType,
         state: PagingState<Int, BookItem>
     ): MediatorResult {
-        loadPage(pageToLoad, loadType)
-        return MediatorResult.Success(true)
+
+        return loadPage(pageToLoad, loadType)
     }
 }

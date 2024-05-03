@@ -7,6 +7,7 @@ import androidx.paging.PagingState
 import com.vasberc.domain.fakeDb.FakeBookDao
 import com.vasberc.domain.fakeDb.FakeBookRemoteKeysDao
 import com.vasberc.domain.fakeDb.FakeDb
+import com.vasberc.domain.paging.FakeRemoteMediator
 import com.vasberc.domain.repo.BooksLocalRepo
 import com.vasberc.domain.repo.BooksRemoteRepo
 import com.vasberc.domain.repo.FakeLocalRepo

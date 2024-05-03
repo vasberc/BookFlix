@@ -27,8 +27,8 @@ class GetBookDetailedDataUseCase(
             } else {
                 val remoteBookState = remoteRepo.getBookById(bookId)
                 if(remoteBookState is ResultState.Success) {
-                    emit(remoteBookState)
                     localRepo.cacheRemoteBook(remoteBookState.data)
+                    emit(remoteBookState)
                 } else {
                     emit(ResultState.Error((remoteBookState as? ResultState.Error)?.error ?: Error.Unknown()))
                 }
