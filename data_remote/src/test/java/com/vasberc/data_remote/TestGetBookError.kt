@@ -15,7 +15,7 @@ class TestGetBookError {
     fun testIsServerError() = runTest {
         repo = FakeRepo(FakeService(FakeService.SERVER_ERROR))
         val result = repo.getBookById(1)
-        val isServerError = (result as? ResultState.Error)?.error is com.vasberc.domain.model.ErrorModel.Error.ServerError
+        val isServerError = (result as? ResultState.Error)?.error is Error.Server
         Assert.assertEquals(isServerError, true)
     }
 
@@ -23,7 +23,7 @@ class TestGetBookError {
     fun testIsNetworkError() = runTest {
         repo = FakeRepo(FakeService(FakeService.NETWORK_ERROR))
         val result = repo.getBookById(1)
-        val isNetworkError = (result as? ResultState.Error)?.error is com.vasberc.domain.model.ErrorModel.Error.NetworkError
+        val isNetworkError = (result as? ResultState.Error)?.error is Error.Network
         Assert.assertEquals(isNetworkError, true)
     }
 
@@ -31,7 +31,7 @@ class TestGetBookError {
     fun testIsUnknownError() = runTest {
         repo = FakeRepo(FakeService(FakeService.UNKNOWN_ERROR))
         val result = repo.getBookById(1)
-        val isUnknownError = (result as? ResultState.Error)?.error is com.vasberc.domain.model.ErrorModel.Error.Unknown
+        val isUnknownError = (result as? ResultState.Error)?.error is Error.Unknown
         Assert.assertEquals(isUnknownError, true)
     }
 }

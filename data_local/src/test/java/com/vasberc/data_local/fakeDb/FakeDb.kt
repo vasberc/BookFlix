@@ -1,14 +1,76 @@
 package com.vasberc.data_local.fakeDb
 
+import com.vasberc.data_local.entities.AuthorAndBookDetailedEntity
+import com.vasberc.data_local.entities.AuthorDetailedEntity
 import com.vasberc.data_local.entities.AuthorEntity
 import com.vasberc.data_local.entities.BookAndAuthorsEntity
+import com.vasberc.data_local.entities.BookDetailedWithRelations
 import com.vasberc.data_local.entities.BookItemEntity
 import com.vasberc.data_local.entities.BookRemoteKeysEntity
+import com.vasberc.data_local.entities.DetailedBookEntity
 
 class FakeDb {
     private val books = mutableListOf<BookItemEntity>()
     private val authors = mutableListOf<AuthorEntity>()
     private val remoteKeys = mutableListOf<BookRemoteKeysEntity>()
+
+    private val booksDetailed = mutableListOf<DetailedBookEntity>()
+    private val authorsDetailed = mutableListOf<AuthorDetailedEntity>()
+    private val authorAndBookDetailed = mutableListOf<AuthorAndBookDetailedEntity>()
+
+    fun insertBookDetailedIgnoreStrategy(book: DetailedBookEntity) {
+        if(booksDetailed.none { it.id == book.id }) {
+            booksDetailed.add(book.copy())
+        }
+    }
+
+    fun insertAuthorDetailedIgnoreStrategy(author: AuthorDetailedEntity) {
+        if(authorsDetailed.none { it.name == author.name }) {
+            authorsDetailed.add(author.copy())
+        }
+    }
+
+    fun insertBookAndAuthorDetailedIgnoreStrategy(authorAndBook: AuthorAndBookDetailedEntity) {
+        if(authorAndBookDetailed.none { it.bookId == authorAndBook.bookId && it.name == authorAndBook.name }) {
+            authorAndBookDetailed.add(authorAndBook.copy())
+        }
+    }
+
+    fun getDetailedBooks(): List<BookDetailedWithRelations> {
+        return booksDetailed.asSequence().mapNotNull {
+            getDetailedBook(it.id)
+        }.toList()
+    }
+
+    fun getDetailedBook(bookId: Int): BookDetailedWithRelations? {
+        val book = booksDetailed.find { it.id == bookId } ?: return null
+        val relation = authorAndBookDetailed.filter { it.bookId == book.id }
+        val authors = authorsDetailed.filter { authorEntity ->
+            authorEntity.name in relation.map { it.name }
+        }
+
+        return BookDetailedWithRelations(
+            bookDetailed = book,
+            authors = authors
+        )
+    }
+
+    fun deleteDetailedBook(bookId: Int) {
+        booksDetailed.removeIf { it.id == bookId }
+        //Foreign key with cascade
+        authorAndBookDetailed.removeIf { it.bookId == bookId }
+    }
+
+    fun deleteDetailedAuthorAndBook(bookId: Int) {
+        authorAndBookDetailed.removeIf { it.bookId == bookId }
+    }
+
+    fun deleteDetailedAuthor(name: String) {
+        //Foreign key with restrict
+        if(authorAndBookDetailed.none { it.name == name }) {
+            authorsDetailed.removeIf { it.name == name }
+        }
+    }
 
     fun editBook(book: BookItemEntity) {
         val index = books.indexOfFirst { it.id == book.id }
@@ -49,7 +111,7 @@ class FakeDb {
 
     fun addBookIgnoreStrategy(book: BookItemEntity) {
         if(books.none { it.id == book.id }) {
-            books.add(book)
+            books.add(book.copy())
             //Sqlite reorders the table by the primary key value
             books.sortBy { it.id }
         }
@@ -60,7 +122,7 @@ class FakeDb {
         val index = books.indexOfFirst { it.id == book.id || it.position == book.position }
         if(index != -1) {
             books.removeAt(index)
-            books.add(index, book)
+            books.add(index, book.copy())
         } else {
             books.add(book)
         }
@@ -70,13 +132,13 @@ class FakeDb {
 
     fun addAuthorIgnoreStrategy(authorEntity: AuthorEntity) {
         if(authors.none { it.bookId == authorEntity.bookId && it.name == authorEntity.name }) {
-            authors.add(authorEntity)
+            authors.add(authorEntity.copy())
         }
     }
 
     fun addRemoteKeyIgnoreStrategy(remoteKeysEntity: BookRemoteKeysEntity) {
         if(remoteKeys.none { it.bookId == remoteKeysEntity.bookId}) {
-            remoteKeys.add(remoteKeysEntity)
+            remoteKeys.add(remoteKeysEntity.copy())
             remoteKeys.sortBy { it.bookId }
         }
     }
@@ -85,9 +147,9 @@ class FakeDb {
         val index = remoteKeys.indexOfFirst { it.bookId == remoteKeysEntity.bookId }
         if(index != -1) {
             remoteKeys.removeAt(index)
-            remoteKeys.add(index, remoteKeysEntity)
+            remoteKeys.add(index, remoteKeysEntity.copy())
         } else {
-            remoteKeys.add(remoteKeysEntity)
+            remoteKeys.add(remoteKeysEntity.copy())
         }
         remoteKeys.sortBy { it.bookId }
     }

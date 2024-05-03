@@ -1,15 +1,15 @@
 package com.vasberc.data_local.repo
 
-import com.vasberc.data_local.entities.toEntity
+import com.vasberc.data_local.daos.BookDao
+import com.vasberc.data_local.daos.BookRemoteKeysDao
 import com.vasberc.data_local.entities.asRemoteKeyEntity
-import com.vasberc.data_local.fakeDb.FakeBookDao
-import com.vasberc.data_local.fakeDb.FakeBookRemoteKeysDao
+import com.vasberc.data_local.entities.toEntity
 import com.vasberc.domain.model.BookDetailed
 import com.vasberc.domain.model.BookItem
 import com.vasberc.domain.model.BookRemoteKey
 import com.vasberc.domain.repo.BooksLocalRepo
 
-class FakeLocalRepo(private val fakeBookDao: FakeBookDao, private val fakeBookRemoteKeysDao: FakeBookRemoteKeysDao): BooksLocalRepo {
+class FakeLocalRepo(private val fakeBookDao: BookDao, private val fakeBookRemoteKeysDao: BookRemoteKeysDao): BooksLocalRepo {
     override suspend fun getBooksByPage(limit: Int, offset: Int): List<BookItem> {
         return fakeBookDao.getBooksByPage(limit, offset).map { it.toDomain() }
     }
@@ -51,10 +51,10 @@ class FakeLocalRepo(private val fakeBookDao: FakeBookDao, private val fakeBookRe
     }
 
     override suspend fun getDetailedBook(bookId: Int): BookDetailed? {
-        return null
+        return fakeBookDao.getDetailedBook(bookId)?.toDomain()
     }
 
     override suspend fun cacheRemoteBook(data: BookDetailed) {
-
+        fakeBookDao.insertDetailedBook(data.toEntity())
     }
 }

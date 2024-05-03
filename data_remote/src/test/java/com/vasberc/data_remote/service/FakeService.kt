@@ -4,6 +4,8 @@ import com.haroldadmin.cnradapter.NetworkResponse
 import com.vasberc.data_remote.model.BookResponse
 import com.vasberc.data_remote.model.BooksResponse
 import com.vasberc.data_remote.model.ErrorResponse
+import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
 import java.io.IOException
 
@@ -72,7 +74,13 @@ class FakeService(private val error: Int?) : BookService {
         } catch (e: IOException) {
             NetworkResponse.NetworkError(e)
         } catch (e: IllegalArgumentException) {
-            NetworkResponse.ServerError(ErrorResponse("not found"), null)
+            NetworkResponse.ServerError(
+                ErrorResponse("not found"),
+                Response.error<Any>(
+                    404,
+                    "".toResponseBody(null)
+                )
+            )
         } catch (e: Exception) {
             NetworkResponse.UnknownError(e, null)
         }
@@ -87,7 +95,13 @@ class FakeService(private val error: Int?) : BookService {
         } catch (e: IOException) {
             NetworkResponse.NetworkError(e)
         } catch (e: IllegalArgumentException) {
-            NetworkResponse.ServerError(ErrorResponse("not found"), null)
+            NetworkResponse.ServerError(
+                ErrorResponse("not found"),
+                Response.error<Any>(
+                    404,
+                    "".toResponseBody(null)
+                )
+            )
         } catch (e: Exception) {
             NetworkResponse.UnknownError(e, null)
         }

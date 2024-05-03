@@ -46,5 +46,7 @@ dependencies {
     implementation(libs.bundles.domain)
     coreLibraryDesugaring(libs.desugaring)
     testImplementation(libs.bundles.testing)
+    testImplementation(project(":data_local"))
+    testImplementation(project(":data_remote"))
     androidTestImplementation(libs.bundles.androidTesting)
 }

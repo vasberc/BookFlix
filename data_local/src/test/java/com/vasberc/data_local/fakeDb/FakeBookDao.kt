@@ -35,35 +35,35 @@ class FakeBookDao(private val fakeDb: FakeDb): BookDao {
     }
 
     override suspend fun getDetailedBook(bookId: Int): BookDetailedWithRelations? {
-        return null
+        return fakeDb.getDetailedBook(bookId)
     }
 
     override suspend fun getDetailedBooks(): List<BookDetailedWithRelations> {
-        return listOf()
+        return fakeDb.getDetailedBooks()
     }
 
     override suspend fun deleteDetailedBook(bookId: Int) {
-
+        fakeDb.deleteDetailedBook(bookId)
     }
 
     override suspend fun deleteDetailedAuthorAndBook(bookId: Int) {
-
+        fakeDb.deleteDetailedAuthorAndBook(bookId)
     }
 
     override suspend fun deleteDetailedAuthor(name: String) {
-
+        fakeDb.deleteDetailedAuthor(name)
     }
 
     override suspend fun insertDetailedBook(book: DetailedBookEntity) {
-
+        fakeDb.insertBookDetailedIgnoreStrategy(book)
     }
 
     override suspend fun insertAuthorDetailed(author: AuthorDetailedEntity) {
-
+        fakeDb.insertAuthorDetailedIgnoreStrategy(author)
     }
 
     override suspend fun insertBookAndAuthorDetailed(authorAndBook: AuthorAndBookDetailedEntity) {
-
+        fakeDb.insertBookAndAuthorDetailedIgnoreStrategy(authorAndBook)
     }
 
     override suspend fun insertAllBookAndAuthors(
