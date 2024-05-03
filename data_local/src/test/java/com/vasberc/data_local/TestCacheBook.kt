@@ -23,11 +23,12 @@ class TestCacheBook {
         val remoteKeysDao = FakeBookRemoteKeysDao(db)
         bookDao = FakeBookDao(db)
         localRepo = FakeLocalRepo(bookDao, remoteKeysDao)
+
     }
 
     @Test
     fun cacheBook() = runTest {
-        val book = provideBook(1, listOf("my author"))
+        val book = provideBook(2, listOf("my author"))
         localRepo.cacheRemoteBook(book)
         val dbBook = localRepo.getDetailedBook(book.id)
         assertEquals(book, dbBook)
@@ -41,5 +42,17 @@ class TestCacheBook {
         localRepo.cacheRemoteBook(book1)
         val books = bookDao.getDetailedBooks()
         assertEquals(books.size, 1)
+    }
+
+    @Test
+    fun deleteBook() = runTest {
+        val book1 = provideBook(1, listOf("my author"))
+        val book2 = provideBook(2, listOf("my author"))
+        localRepo.cacheRemoteBook(book2)
+        localRepo.cacheRemoteBook(book1)
+
+        bookDao.deleteDetailedBook(1)
+        val book = bookDao.getDetailedBook(1)
+        assertEquals(book, null)
     }
 }

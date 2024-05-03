@@ -1,4 +1,4 @@
-package com.vasberc.data_local.fakeDb
+package com.vasberc.domain.fakeDb
 
 import com.vasberc.data_local.daos.BookDao
 import com.vasberc.data_local.entities.AuthorAndBookDetailedEntity
@@ -8,7 +8,6 @@ import com.vasberc.data_local.entities.BookAndAuthorsEntity
 import com.vasberc.data_local.entities.BookDetailedWithRelations
 import com.vasberc.data_local.entities.BookItemEntity
 import com.vasberc.data_local.entities.DetailedBookEntity
-import timber.log.Timber
 
 class FakeBookDao(private val fakeDb: FakeDb): BookDao {
     override suspend fun getBooksByPage(limit: Int, offset: Int): List<BookAndAuthorsEntity> {
